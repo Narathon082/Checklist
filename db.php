@@ -39,10 +39,26 @@ if (!$conn->query($createDbQuery)) {
 $conn->select_db($db_name);
 
 // Check if the submissions table exists and is using the old 9-column schema (less than 20 columns)
+// Or check if it is using the old VARCHAR(10) for g1 column
 $tableCheck = $conn->query("SHOW TABLES LIKE 'submissions'");
 if ($tableCheck && $tableCheck->num_rows > 0) {
     $columnsResult = $conn->query("SHOW COLUMNS FROM `submissions`");
-    if ($columnsResult && $columnsResult->num_rows < 20) {
+    $numCols = $columnsResult ? $columnsResult->num_rows : 0;
+    
+    $needsRecreate = false;
+    if ($numCols < 20) {
+        $needsRecreate = true;
+    } else {
+        // Check if g1 is using varchar(10)
+        $g1Check = $conn->query("SHOW COLUMNS FROM `submissions` LIKE 'g1'");
+        if ($g1Check && $g1Row = $g1Check->fetch_assoc()) {
+            if ($g1Row['Type'] === 'varchar(10)') {
+                $needsRecreate = true;
+            }
+        }
+    }
+    
+    if ($needsRecreate) {
         $conn->query("DROP TABLE IF EXISTS `submissions`");
     }
 }
@@ -158,75 +174,75 @@ $createTableQuery = "CREATE TABLE IF NOT EXISTS `submissions` (
     `sa_5_4` VARCHAR(5) DEFAULT '',
     `sa_5_5` VARCHAR(5) DEFAULT '',
 
-    -- ส่วนที่ 4 และ 5: ผลการประเมินและหลักฐานอ้างอิง
-    `g1` VARCHAR(10) DEFAULT '',
+    -- ส่วนที่ 4 และ 5: ผลการประเมินและหลักฐานอ้างอิง (ปรับเพิ่มความกว้าง VARCHAR เป็น 20 เพื่อให้เก็บ 'มีอย่างเหมาะสม' ขนาด 14 ตัวอักษรได้ครบถ้วน)
+    `g1` VARCHAR(20) DEFAULT '',
     `g1_evidence` TEXT DEFAULT NULL,
-    `g2` VARCHAR(10) DEFAULT '',
+    `g2` VARCHAR(20) DEFAULT '',
     `g2_evidence` TEXT DEFAULT NULL,
-    `g3` VARCHAR(10) DEFAULT '',
+    `g3` VARCHAR(20) DEFAULT '',
     `g3_evidence` TEXT DEFAULT NULL,
-    `g4` VARCHAR(10) DEFAULT '',
+    `g4` VARCHAR(20) DEFAULT '',
     `g4_evidence` TEXT DEFAULT NULL,
-    `g5` VARCHAR(10) DEFAULT '',
+    `g5` VARCHAR(20) DEFAULT '',
     `g5_evidence` TEXT DEFAULT NULL,
-    `g6` VARCHAR(10) DEFAULT '',
+    `g6` VARCHAR(20) DEFAULT '',
     `g6_evidence` TEXT DEFAULT NULL,
-    `g7` VARCHAR(10) DEFAULT '',
+    `g7` VARCHAR(20) DEFAULT '',
     `g7_evidence` TEXT DEFAULT NULL,
 
-    `p1` VARCHAR(10) DEFAULT '',
+    `p1` VARCHAR(20) DEFAULT '',
     `p1_evidence` TEXT DEFAULT NULL,
-    `p2` VARCHAR(10) DEFAULT '',
+    `p2` VARCHAR(20) DEFAULT '',
     `p2_evidence` TEXT DEFAULT NULL,
-    `p3` VARCHAR(10) DEFAULT '',
+    `p3` VARCHAR(20) DEFAULT '',
     `p3_evidence` TEXT DEFAULT NULL,
-    `p4` VARCHAR(10) DEFAULT '',
+    `p4` VARCHAR(20) DEFAULT '',
     `p4_evidence` TEXT DEFAULT NULL,
-    `p5` VARCHAR(10) DEFAULT '',
+    `p5` VARCHAR(20) DEFAULT '',
     `p5_evidence` TEXT DEFAULT NULL,
-    `p6` VARCHAR(10) DEFAULT '',
+    `p6` VARCHAR(20) DEFAULT '',
     `p6_evidence` TEXT DEFAULT NULL,
-    `p7` VARCHAR(10) DEFAULT '',
+    `p7` VARCHAR(20) DEFAULT '',
     `p7_evidence` TEXT DEFAULT NULL,
 
-    `s1` VARCHAR(10) DEFAULT '',
+    `s1` VARCHAR(20) DEFAULT '',
     `s1_evidence` TEXT DEFAULT NULL,
-    `s2` VARCHAR(10) DEFAULT '',
+    `s2` VARCHAR(20) DEFAULT '',
     `s2_evidence` TEXT DEFAULT NULL,
-    `s3` VARCHAR(10) DEFAULT '',
+    `s3` VARCHAR(20) DEFAULT '',
     `s3_evidence` TEXT DEFAULT NULL,
-    `s4` VARCHAR(10) DEFAULT '',
+    `s4` VARCHAR(20) DEFAULT '',
     `s4_evidence` TEXT DEFAULT NULL,
-    `s5` VARCHAR(10) DEFAULT '',
+    `s5` VARCHAR(20) DEFAULT '',
     `s5_evidence` TEXT DEFAULT NULL,
-    `s6` VARCHAR(10) DEFAULT '',
+    `s6` VARCHAR(20) DEFAULT '',
     `s6_evidence` TEXT DEFAULT NULL,
-    `s7` VARCHAR(10) DEFAULT '',
+    `s7` VARCHAR(20) DEFAULT '',
     `s7_evidence` TEXT DEFAULT NULL,
-    `s8` VARCHAR(10) DEFAULT '',
+    `s8` VARCHAR(20) DEFAULT '',
     `s8_evidence` TEXT DEFAULT NULL,
-    `s9` VARCHAR(10) DEFAULT '',
+    `s9` VARCHAR(20) DEFAULT '',
     `s9_evidence` TEXT DEFAULT NULL,
 
-    `e1` VARCHAR(10) DEFAULT '',
+    `e1` VARCHAR(20) DEFAULT '',
     `e1_evidence` TEXT DEFAULT NULL,
-    `e2` VARCHAR(10) DEFAULT '',
+    `e2` VARCHAR(20) DEFAULT '',
     `e2_evidence` TEXT DEFAULT NULL,
-    `e3` VARCHAR(10) DEFAULT '',
+    `e3` VARCHAR(20) DEFAULT '',
     `e3_evidence` TEXT DEFAULT NULL,
-    `e4` VARCHAR(10) DEFAULT '',
+    `e4` VARCHAR(20) DEFAULT '',
     `e4_evidence` TEXT DEFAULT NULL,
 
-    `d1` VARCHAR(10) DEFAULT '',
+    `d1` VARCHAR(20) DEFAULT '',
     `d1_evidence` TEXT DEFAULT NULL,
-    `d2` VARCHAR(10) DEFAULT '',
+    `d2` VARCHAR(20) DEFAULT '',
     `d2_evidence` TEXT DEFAULT NULL,
-    `d4` VARCHAR(10) DEFAULT '',
+    `d4` VARCHAR(20) DEFAULT '',
     `d4_evidence` TEXT DEFAULT NULL,
-    `d5` VARCHAR(10) DEFAULT '',
+    `d5` VARCHAR(20) DEFAULT '',
     `d5_evidence` TEXT DEFAULT NULL,
 
-    `r1` VARCHAR(10) DEFAULT '',
+    `r1` VARCHAR(20) DEFAULT '',
     `r1_evidence` TEXT DEFAULT NULL,
 
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

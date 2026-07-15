@@ -37,6 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             unset($row['created_at']);
             unset($row['updated_at']);
             $data = $row;
+        } else {
+            // If the row was dropped or doesn't exist, clean session
+            unset($_SESSION['current_submission_id']);
         }
         $stmt->close();
     }
@@ -69,6 +72,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $submissionId = isset($_SESSION['current_submission_id']) ? $_SESSION['current_submission_id'] : null;
+
+    // Check if the record actually exists in the database to prevent orphaned session updates
+    if ($submissionId) {
+        $checkStmt = $conn->prepare("SELECT id FROM submissions WHERE id = ?");
+        $checkStmt->bind_param("i", $submissionId);
+        $checkStmt->execute();
+        $checkRes = $checkStmt->get_result();
+        if ($checkRes->num_rows === 0) {
+            unset($_SESSION['current_submission_id']);
+            $submissionId = null;
+        }
+        $checkStmt->close();
+    }
 
     if ($submissionId) {
         // Update existing submission (Only update columns present in the POST data)
