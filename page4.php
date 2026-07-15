@@ -15,7 +15,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=2">
 </head>
 <body>
     <!-- Top Decorative Line -->
@@ -26,7 +26,7 @@
         <header class="form-header no-print">
             <div class="logo-wrapper">
                 <div class="gov-seal">
-                    <i data-lucide="award"></i>
+                    <img src="assets/images/ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="title-group">
                     <h1>แบบประเมินคุณภาพข้อมูลด้วยตนเอง (DQA Self-Assessment)</h1>
@@ -916,6 +916,6 @@
     </script>
 
     <!-- Custom Script -->
-    <script src="app.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

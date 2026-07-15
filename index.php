@@ -1,3 +1,4 @@
+<?php require_once 'db.php'; ?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -15,7 +16,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=2">
 </head>
 <body>
     <!-- Top Decorative Line -->
@@ -27,7 +28,7 @@
             <div class="logo-wrapper">
                 <!-- Golden & Blue Seal Motif -->
                 <div class="gov-seal">
-                    <i data-lucide="award"></i>
+                    <img src="assets/images/ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="title-group">
                     <h1>แบบตรวจประเมินคุณภาพ (DQA Checklist) รายงานตรวจประเมิน</h1>
@@ -71,18 +72,14 @@
                         <div class="form-group col-6">
                             <label for="info-agency">ชื่อหน่วยงานที่ดำเนินงาน :</label>
                             <select id="info-agency" name="info_agency">
-                                <option value="กองกลาง (กก.)">กองกลาง (กก.)</option>
-                                <option value="กองตรวจราชการ (กตร.)">กองตรวจราชการ (กตร.)</option>
-                                <option value="กองบริหารการคลัง (กบค.)">กองบริหารการคลัง (กบค.)</option>
-                                <option value="กองบริหารการพาณิชย์ภูมิภาค (กบภ.)">กองบริหารการพาณิชย์ภูมิภาค (กบภ.)</option>
-                                <option value="กองบริหารทรัพยากรบุคคล (กบบ.)">กองบริหารทรัพยากรบุคคล (กบบ.)</option>
-                                <option value="กองยุทธศาสตร์และแผนงาน (กยผ.)">กองยุทธศาสตร์และแผนงาน (กยผ.)</option>
-                                <option value="ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร (ศทส.)">ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร (ศทส.)</option>
-                                <option value="สถาบันกรมพระจันทบุรีนฤนาถ (สจป.)">สถาบันกรมพระจันทบุรีนฤนาถ (สจป.)</option>
-                                <option value="กลุ่มกฎหมาย (กม.)">กลุ่มกฎหมาย (กม.)</option>
-                                <option value="กลุ่มตรวจสอบภายใน (กตน.)">กลุ่มตรวจสอบภายใน (กตน.)</option>
-                                <option value="กลุ่มพัฒนาระบบบริหาร (กพร.)">กลุ่มพัฒนาระบบบริหาร (กพร.)</option>
-                                <option value="ศูนย์ปฏิบัติการต่อต้านการทุจริต (ศปท.)">ศูนย์ปฏิบัติการต่อต้านการทุจริต (ศปท.)</option>
+                                <?php
+                                $agenciesQuery = $conn->query("SELECT name FROM agencies ORDER BY id ASC");
+                                if ($agenciesQuery && $agenciesQuery->num_rows > 0) {
+                                    while ($agencyRow = $agenciesQuery->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($agencyRow['name']) . '">' . htmlspecialchars($agencyRow['name']) . '</option>';
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                         
@@ -160,7 +157,7 @@
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="eval-date">วันที่ประเมินคุณภาพข้อมูล :</label>
-                            <input type="date" id="eval-date" name="eval_date">
+                            <input type="date" id="eval-date" name="eval_date" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: #ffffff;">
                         </div>
                         
                         <div class="form-group col-6">
@@ -219,6 +216,6 @@
     </div>
 
     <!-- Custom Script -->
-    <script src="app.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

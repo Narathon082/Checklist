@@ -150,7 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'info-agency', name: 'ชื่อหน่วยงานที่ดำเนินงาน' },
             { id: 'info-service', name: 'บริการ' },
             { id: 'info-head', name: 'หัวหน้า กอง/สำนัก/ฝ่าย/ศูนย์ และ/หรือ บริการ' },
-            { id: 'eval-date', name: 'วันที่ประเมิน' }
+            { id: 'eval-date', name: 'วันที่ประเมิน' },
+            { id: 'control-date', name: 'วันที่ประเมินผลควบคุม (Page 5)' }
         ];
 
         requiredFields.forEach(field => {
@@ -280,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </p>
                 </div>
                 <div class="dqa-modal-footer" style="justify-content: center; background-color: #ffffff;">
-                    <a href="index.php" class="btn btn-primary" style="padding: 0.6rem 2rem; border-radius: 8px; text-decoration: none;">
+                    <a href="new.php" class="btn btn-primary" style="padding: 0.6rem 2rem; border-radius: 8px; text-decoration: none;">
                         กลับสู่หน้าแรก
                     </a>
                 </div>
