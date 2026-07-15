@@ -60,6 +60,16 @@ if ($tableCheck && $tableCheck->num_rows > 0) {
     
     if ($needsRecreate) {
         $conn->query("DROP TABLE IF EXISTS `submissions`");
+    } else {
+        // Check if column d5 exists, which means we are on the old schema and need to migrate it to d3/d4
+        $d5Check = $conn->query("SHOW COLUMNS FROM `submissions` LIKE 'd5'");
+        if ($d5Check && $d5Check->num_rows > 0) {
+            // Rename d4 -> d3 and d5 -> d4 using CHANGE COLUMN for MySQL 5.7+ compatibility
+            $conn->query("ALTER TABLE `submissions` CHANGE COLUMN `d4` `d3` VARCHAR(20) DEFAULT ''");
+            $conn->query("ALTER TABLE `submissions` CHANGE COLUMN `d4_evidence` `d3_evidence` TEXT DEFAULT NULL");
+            $conn->query("ALTER TABLE `submissions` CHANGE COLUMN `d5` `d4` VARCHAR(20) DEFAULT ''");
+            $conn->query("ALTER TABLE `submissions` CHANGE COLUMN `d5_evidence` `d4_evidence` TEXT DEFAULT NULL");
+        }
     }
 }
 
@@ -237,10 +247,10 @@ $createTableQuery = "CREATE TABLE IF NOT EXISTS `submissions` (
     `d1_evidence` TEXT DEFAULT NULL,
     `d2` VARCHAR(20) DEFAULT '',
     `d2_evidence` TEXT DEFAULT NULL,
+    `d3` VARCHAR(20) DEFAULT '',
+    `d3_evidence` TEXT DEFAULT NULL,
     `d4` VARCHAR(20) DEFAULT '',
     `d4_evidence` TEXT DEFAULT NULL,
-    `d5` VARCHAR(20) DEFAULT '',
-    `d5_evidence` TEXT DEFAULT NULL,
 
     `r1` VARCHAR(20) DEFAULT '',
     `r1_evidence` TEXT DEFAULT NULL,

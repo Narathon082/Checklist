@@ -645,10 +645,25 @@
                                     </td>
                                     <td><textarea name="d2_evidence" rows="2" placeholder="ระบุหลักฐานหรือความเห็น..."></textarea></td>
                                 </tr>
+                                <!-- D3 -->
+                                <tr>
+                                    <td class="text-center font-bold">D3</td>
+                                    <td class="text-justify font-medium">ข้อมูลที่ถูกใช้เพื่อการรายงานต่อหน่วยงานภายนอก อยู่ภายใต้การตรวจสอบอย่างเข้มงวด และได้รับการอนุมัติจากผู้บริหารระดับสูง หรือไม่</td>
+                                    <td class="text-center">
+                                        <label class="table-radio"><input type="radio" name="d3" value="มีอย่างเหมาะสม"><span class="table-checkmark"></span></label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="table-radio"><input type="radio" name="d3" value="มีบางส่วน"><span class="table-checkmark"></span></label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="table-radio"><input type="radio" name="d3" value="ไม่มี"><span class="table-checkmark"></span></label>
+                                    </td>
+                                    <td><textarea name="d3_evidence" rows="2" placeholder="ระบุหลักฐานหรือความเห็น..."></textarea></td>
+                                </tr>
                                 <!-- D4 -->
                                 <tr>
                                     <td class="text-center font-bold">D4</td>
-                                    <td class="text-justify font-medium">ข้อมูลที่ถูกใช้เพื่อการรายงานต่อหน่วยงานภายนอก อยู่ภายใต้การตรวจสอบอย่างเข้มงวด และได้รับการอนุมัติจากผู้บริหารระดับสูง หรือไม่</td>
+                                    <td class="text-justify font-medium">การส่งคืนข้อมูลทั้งหมด ถูกจัดเตรียมและจัดส่งตามระยะเวลาที่กำหนด รวมถึงมีการสนับสนุนแนวทางการตรวจสอบอย่างชัดเจนและครบถ้วน หรือไม่</td>
                                     <td class="text-center">
                                         <label class="table-radio"><input type="radio" name="d4" value="มีอย่างเหมาะสม"><span class="table-checkmark"></span></label>
                                     </td>
@@ -659,21 +674,6 @@
                                         <label class="table-radio"><input type="radio" name="d4" value="ไม่มี"><span class="table-checkmark"></span></label>
                                     </td>
                                     <td><textarea name="d4_evidence" rows="2" placeholder="ระบุหลักฐานหรือความเห็น..."></textarea></td>
-                                </tr>
-                                <!-- D5 -->
-                                <tr>
-                                    <td class="text-center font-bold">D5</td>
-                                    <td class="text-justify font-medium">การส่งคืนข้อมูลทั้งหมด ถูกจัดเตรียมและจัดส่งตามระยะเวลาที่กำหนด รวมถึงมีการสนับสนุนแนวทางการตรวจสอบอย่างชัดเจนและครบถ้วน หรือไม่</td>
-                                    <td class="text-center">
-                                        <label class="table-radio"><input type="radio" name="d5" value="มีอย่างเหมาะสม"><span class="table-checkmark"></span></label>
-                                    </td>
-                                    <td class="text-center">
-                                        <label class="table-radio"><input type="radio" name="d5" value="มีบางส่วน"><span class="table-checkmark"></span></label>
-                                    </td>
-                                    <td class="text-center">
-                                        <label class="table-radio"><input type="radio" name="d5" value="ไม่มี"><span class="table-checkmark"></span></label>
-                                    </td>
-                                    <td><textarea name="d5_evidence" rows="2" placeholder="ระบุหลักฐานหรือความเห็น..."></textarea></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -178,10 +178,10 @@ CREATE TABLE `submissions` (
     `d1_evidence` TEXT DEFAULT NULL,
     `d2` VARCHAR(20) DEFAULT '',
     `d2_evidence` TEXT DEFAULT NULL,
+    `d3` VARCHAR(20) DEFAULT '',
+    `d3_evidence` TEXT DEFAULT NULL,
     `d4` VARCHAR(20) DEFAULT '',
     `d4_evidence` TEXT DEFAULT NULL,
-    `d5` VARCHAR(20) DEFAULT '',
-    `d5_evidence` TEXT DEFAULT NULL,
 
     `r1` VARCHAR(50) DEFAULT '',
     `r1_evidence` TEXT DEFAULT NULL,
