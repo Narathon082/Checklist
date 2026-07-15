@@ -50,7 +50,7 @@
 *   [api.php](file:///c:/xampp/htdocs/Checklist/api.php): API Endpoint คอยรับและส่งต่อข้อมูลในฟอร์มแบบประเมินในรูปแบบ JSON และบันทึก/อัปเดตข้อมูลลงฐานข้อมูล MySQL ตามคอลัมน์ที่รองรับ (มีฟังก์ชันเช็กคอลัมน์อัตโนมัติ)
 
 ### 3. 🖥️ หน้าแสดงผลและภาพรวมหลัก (Main System Pages)
-*   [index.php](file:///c:/xampp/htdocs/Checklist/index.php): **แบบตรวจประเมินคุณภาพ (DQA Checklist) รวมทุกขั้นตอนในหน้าเดียว** (รวมข้อมูลทั่วไป, มิติคุณภาพข้อมูล, แบบประเมินตนเอง, เกณฑ์การควบคุมติดตาม และกราฟเรดาร์)
+*   [dqa_combined.php](file:///c:/xampp/htdocs/Checklist/dqa_combined.php): **แบบตรวจประเมินคุณภาพ (DQA Checklist) รวมทุกขั้นตอนในหน้าเดียว** (รวมข้อมูลทั่วไป, มิติคุณภาพข้อมูล, แบบประเมินตนเอง, เกณฑ์การควบคุมติดตาม และกราฟเรดาร์)
 *   [new.php](file:///c:/xampp/htdocs/Checklist/new.php): ทำความสะอาด Session การประเมินเดิม แล้วส่งไปยังหน้าประเมินรวมหลัก
 *   [edit.php](file:///c:/xampp/htdocs/Checklist/edit.php): รับ ID แบบประเมินเพื่อตั้งค่าลงใน Session สำหรับเปิดขึ้นมาแก้ไขข้อมูลบนฟอร์มรวมหลัก
 *   [dashboard.php](file:///c:/xampp/htdocs/Checklist/dashboard.php): หน้ารายการประเมินคุณภาพทั้งหมด แสดงสถิติจำนวนฟอร์มที่กรอกเสร็จและแบบร่าง ค้นหาตามชื่อชุดข้อมูล กรองข้อมูลตามหน่วยงาน และลบข้อมูลได้
@@ -98,5 +98,5 @@
 
 เข้าใช้งานระบบส่วนต่างๆ ผ่านทางเบราว์เซอร์ได้ดังนี้:
 *   📟 **หน้ารวมแดชบอร์ดหลัก (Dashboard):** [http://localhost/Checklist/dashboard.php](http://localhost/Checklist/dashboard.php)
-*   📝 **เริ่มทำแบบประเมินฉบับรวมหน้าเดียว:** [http://localhost/Checklist/index.php](http://localhost/Checklist/index.php)
+*   📝 **เริ่มทำแบบประเมินฉบับรวมหน้าเดียว:** [http://localhost/Checklist/dqa_combined.php](http://localhost/Checklist/dqa_combined.php)
 *   📝 **เริ่มทำแบบประเมินฉบับแยกหน้าแบบเดิม:** [http://localhost/Checklist/old_pages/new.php](http://localhost/Checklist/old_pages/new.php)

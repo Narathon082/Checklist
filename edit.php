@@ -7,6 +7,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $_SESSION['current_submission_id'] = intval($_GET['id']);
 }
 
-header('Location: index.php');
+header('Location: dqa_combined.php');
 exit;
 ?>
