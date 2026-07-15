@@ -160,7 +160,7 @@
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="eval-date">วันที่ประเมินคุณภาพข้อมูล :</label>
-                            <input type="date" id="eval-date" name="eval_date">
+                            <input type="date" id="eval-date" name="eval_date" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: #ffffff;">
                         </div>
                         
                         <div class="form-group col-6">
