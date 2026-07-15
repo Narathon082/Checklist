@@ -436,10 +436,14 @@ $questions_page5 = [
 
         .badge-align {
             display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 700;
+            white-space: nowrap;
+            text-align: center;
+            min-width: 110px;
+            box-sizing: border-box;
         }
 
         .badge-align.good { background-color: #d1fae5; color: #065f46; }
