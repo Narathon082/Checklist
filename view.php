@@ -240,7 +240,7 @@ $questions_page5 = [
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="assets/css/style.css?v=2">
     
     <style>
         .report-actions {
@@ -505,7 +505,7 @@ $questions_page5 = [
         <main class="document-paper">
             <div class="paper-header" style="text-align: center; border-bottom: 3px double var(--moc-gold); padding-bottom: 1.5rem; margin-bottom: 2rem;">
                 <div style="margin: 0 auto 1rem auto; width: 64px; height: 64px;">
-                    <img src="ops-logo.jpg" alt="OPS Logo" style="width:64px; height:64px; object-fit:contain; border-radius:50%;">
+                    <img src="assets/images/ops-logo.jpg" alt="OPS Logo" style="width:64px; height:64px; object-fit:contain; border-radius:50%;">
                 </div>
                 <h2 style="font-size: 1.6rem; color: var(--moc-blue-deep); font-weight: 700;">รายงานสรุปผลการตรวจประเมินคุณภาพข้อมูล (DQA Checklist)</h2>
                 <span class="agency-tag" style="font-size: 1rem; color: var(--text-muted); font-weight: 500;">

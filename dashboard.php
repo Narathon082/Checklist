@@ -96,7 +96,7 @@ if ($agenciesQuery) {
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="assets/css/style.css?v=2">
     
     <style>
         /* Dashboard-specific Premium Styles */
@@ -322,7 +322,7 @@ if ($agenciesQuery) {
         <header class="form-header no-print">
             <div class="logo-wrapper">
                 <div class="gov-seal">
-                    <img src="ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
+                    <img src="assets/images/ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="title-group">
                     <h1>ระบบแดชบอร์ด DQA Checklist</h1>

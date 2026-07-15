@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="assets/css/style.css?v=2">
 </head>
 <body>
     <!-- Top Decorative Line -->
@@ -28,7 +28,7 @@
             <div class="logo-wrapper">
                 <!-- Golden & Blue Seal Motif -->
                 <div class="gov-seal">
-                    <img src="ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
+                    <img src="assets/images/ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="title-group">
                     <h1>แบบตรวจประเมินคุณภาพ (DQA Checklist) รายงานตรวจประเมิน</h1>
@@ -216,6 +216,6 @@
     </div>
 
     <!-- Custom Script -->
-    <script src="app.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
