@@ -31,7 +31,7 @@
                     <img src="assets/images/ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="title-group">
-                    <h1>แบบตรวจประเมินคุณภาพ (DQA Checklist) รวมสเต็ป</h1>
+                    <h1>แบบตรวจประเมินคุณภาพ (DQA Checklist)</h1>
                     <span class="agency-tag">สำนักงานปลัดกระทรวงพาณิชย์</span>
                 </div>
             </div>
