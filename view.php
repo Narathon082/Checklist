@@ -310,11 +310,15 @@ $questions_page5 = [
         .status-pill {
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
-            padding: 0.2rem 0.5rem;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.35rem 0.6rem;
             border-radius: 9999px;
             font-size: 0.8rem;
             font-weight: 700;
+            white-space: nowrap;
+            min-width: 85px;
+            box-sizing: border-box;
         }
 
         .status-pill.yes {
