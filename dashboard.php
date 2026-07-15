@@ -71,12 +71,12 @@ if (!empty($params)) {
 $stmt->execute();
 $submissions = $stmt->get_result();
 
-// Get list of distinct agencies for the filter dropdown
-$agenciesQuery = $conn->query("SELECT DISTINCT info_agency FROM submissions WHERE info_agency != '' ORDER BY info_agency ASC");
+// Get list of agencies for the filter dropdown from agencies table
+$agenciesQuery = $conn->query("SELECT name FROM agencies ORDER BY id ASC");
 $agencies = [];
 if ($agenciesQuery) {
     while ($row = $agenciesQuery->fetch_assoc()) {
-        $agencies[] = $row['info_agency'];
+        $agencies[] = $row['name'];
     }
 }
 ?>

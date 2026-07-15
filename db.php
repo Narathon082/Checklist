@@ -258,3 +258,39 @@ if (!$conn->query($createTableQuery)) {
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
+
+// 5. Create agencies table if not exists
+$createAgenciesTableQuery = "CREATE TABLE IF NOT EXISTS `agencies` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+if ($conn->query($createAgenciesTableQuery)) {
+    // Check if table is empty, insert default list
+    $checkEmpty = $conn->query("SELECT COUNT(*) as count FROM agencies");
+    if ($checkEmpty && $checkEmpty->fetch_assoc()['count'] == 0) {
+        $defaults = [
+            "กองกลาง (กก.)",
+            "กองตรวจราชการ (กตร.)",
+            "กองบริหารการคลัง (กบค.)",
+            "กองบริหารการพาณิชย์ภูมิภาค (กบภ.)",
+            "กองบริหารทรัพยากรบุคคล (กบบ.)",
+            "กองยุทธศาสตร์และแผนงาน (กยผ.)",
+            "ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร (ศทส.)",
+            "สถาบันกรมพระจันทบุรีนฤนาถ (สจป.)",
+            "กลุ่มกฎหมาย (กม.)",
+            "กลุ่มตรวจสอบภายใน (กตน.)",
+            "กลุ่มพัฒนาระบบบริหาร (กพร.)",
+            "ศูนย์ปฏิบัติการต่อต้านการทุจริต (ศปท.)"
+        ];
+        $stmt = $conn->prepare("INSERT INTO agencies (name) VALUES (?)");
+        if ($stmt) {
+            foreach ($defaults as $name) {
+                $stmt->bind_param("s", $name);
+                $stmt->execute();
+            }
+            $stmt->close();
+        }
+    }
+}
+

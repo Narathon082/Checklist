@@ -189,3 +189,30 @@ CREATE TABLE `submissions` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `agencies`
+--
+DROP TABLE IF EXISTS `agencies`;
+CREATE TABLE `agencies` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `agencies`
+--
+INSERT INTO `agencies` (`name`) VALUES
+('กองกลาง (กก.)'),
+('กองตรวจราชการ (กตร.)'),
+('กองบริหารการคลัง (กบค.)'),
+('กองบริหารการพาณิชย์ภูมิภาค (กบภ.)'),
+('กองบริหารทรัพยากรบุคคล (กบบ.)'),
+('กองยุทธศาสตร์และแผนงาน (กยผ.)'),
+('ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร (ศทส.)'),
+('สถาบันกรมพระจันทบุรีนฤนาถ (สจป.)'),
+('กลุ่มกฎหมาย (กม.)'),
+('กลุ่มตรวจสอบภายใน (กตน.)'),
+('กลุ่มพัฒนาระบบบริหาร (กพร.)'),
+('ศูนย์ปฏิบัติการต่อต้านการทุจริต (ศปท.)');
+
