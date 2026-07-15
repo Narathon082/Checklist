@@ -1,4 +1,4 @@
-<?php require_once 'db.php'; ?>
+<?php require_once '../db.php'; ?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../assets/css/style.css?v=2">
 </head>
 <body>
     <!-- Top Decorative Line -->
@@ -27,7 +27,7 @@
         <header class="form-header no-print">
             <div class="logo-wrapper">
                 <div class="gov-seal">
-                    <img src="assets/images/ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
+                    <img src="../assets/images/ops-logo.jpg" alt="OPS Logo" style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="title-group">
                     <h1>แบบตรวจประเมินการควบคุมและติดตามคุณภาพข้อมูล<br>(Data Quality Monitoring and Control Checklist)</h1>
@@ -64,7 +64,7 @@
             </div>
 
             <!-- Form Start -->
-            <form id="dqa-form" method="POST" action="api.php">
+            <form id="dqa-form" method="POST" action="../api.php">
 
                 <!-- SECTION 1: ข้อมูลทั่วไป -->
                 <fieldset class="form-section">
@@ -728,6 +728,6 @@
     </div>
 
     <!-- Custom Script -->
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/app.js"></script>
 </body>
 </html>

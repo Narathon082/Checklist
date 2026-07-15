@@ -3,13 +3,13 @@
 
 ระบบเว็บแอปพลิเคชันเพื่ออำนวยความสะดวกในการกรอกแบบตรวจประเมินคุณภาพข้อมูล (Data Quality Assessment - DQA Checklist) ด้วยตนเอง พัฒนาโดยใช้โครงสร้าง PHP, HTML, CSS, JavaScript และฐานข้อมูล MySQL
 
-เพื่อตอบสนองความต้องการของผู้ใช้งานที่ต้องการให้รวมแบบฟอร์มประเมินทั้งหมดเข้ามารวมเป็น **หน้าจอเดียวแบบ Multi-step** โดยยังคงการนำเสนอด้วยปุ่มเปลี่ยนสเต็ปย่อยและโครงสร้างเนื้อหาข้อความดั้งเดิมครบถ้วน 100% ไม่สูญหาย ระบบจึงได้พัฒนาไฟล์ใหม่ชื่อ [dqa_combined.php](file:///c:/xampp/htdocs/Checklist/dqa_combined.php) เพื่อทำงานร่วมกับส่วนอื่นของระบบได้อย่างสมบูรณ์
+ระบบได้ทำการรวมแบบฟอร์มประเมินทั้งหมดเข้ามารวมเป็น **หน้าจอเดียวแบบ Multi-step** (จัดแสดงในหน้าแรกของระบบหลัก) เพื่อให้สะดวกและรวดเร็วในการใช้งาน และแยกเก็บไฟล์ระบบเดิมแบบแยกหน้าให้อยู่ในโฟลเดอร์เฉพาะอย่างเป็นระเบียบ
 
 ---
 
-## ⚡ คุณสมบัติเด่นของหน้าประเมินรวม (dqa_combined.php Key Features)
+## ⚡ คุณสมบัติเด่นของหน้าประเมินรวม (index.php ที่รูทหลัก)
 
-หน้าประเมินรวมแบบเบ็ดเสร็จในหน้าเดียว [dqa_combined.php](file:///c:/xampp/htdocs/Checklist/dqa_combined.php) มาพร้อมระบบ JavaScript Engine ทรงประสิทธิภาพที่ควบคุมลักษณะการใช้งานขององค์กรระดับพรีเมียมดังนี้:
+หน้าประเมินรวมแบบเบ็ดเสร็จในหน้าเดียว [index.php](file:///c:/xampp/htdocs/Checklist/index.php) มาพร้อมระบบ JavaScript Engine ทรงประสิทธิภาพที่ควบคุมลักษณะการใช้งานขององค์กรระดับพรีเมียมดังนี้:
 
 1. **ระบบ Stepper & Multi-step Form**:
    * รวมเนื้อหาจากแบบฟอร์ม 4 หน้าหลักมาซ้อนกันแบบสลับแสดงผลด้วย Class `.form-step.active`
@@ -48,28 +48,28 @@
 
 ### 2. 🔌 ส่วนประมวลผลข้อมูล (API & Session Handling)
 *   [api.php](file:///c:/xampp/htdocs/Checklist/api.php): API Endpoint คอยรับและส่งต่อข้อมูลในฟอร์มแบบประเมินในรูปแบบ JSON และบันทึก/อัปเดตข้อมูลลงฐานข้อมูล MySQL ตามคอลัมน์ที่รองรับ (มีฟังก์ชันเช็กคอลัมน์อัตโนมัติ)
-*   [new.php](file:///c:/xampp/htdocs/Checklist/new.php): ทำความสะอาด Session การประเมินเดิม แล้วส่งไปยังหน้ากรอกประเมินต้นฉบับ
-*   [edit.php](file:///c:/xampp/htdocs/Checklist/edit.php): รับ ID แบบประเมินเพื่อตั้งค่าลงใน Session สำหรับเปิดขึ้นมาแก้ไขข้อมูล
 
-### 3. 📝 หน้าฟอร์มแบบประเมินดั้งเดิมแยกหน้า (Multi-page Forms)
-> [!NOTE]
-> ไฟล์เหล่านี้ถูกเก็บรักษาไว้ตามโครงสร้างเดิมโดยไม่มีการเข้าไปแก้ไขทับแต่อย่างใด เพื่อให้คงระบบการกรอกดั้งเดิมของหน่วยงานไว้
-
-*   [index.php](file:///c:/xampp/htdocs/Checklist/index.php): หน้าแรกสำหรับกรอกข้อมูลทั่วไปและเกณฑ์ประเมินเบื้องต้น
-*   [page3.php](file:///c:/xampp/htdocs/Checklist/page3.php): หน้าประเมินมิติคุณภาพข้อมูล
-*   [page4.php](file:///c:/xampp/htdocs/Checklist/page4.php): หน้าแบบประเมินตนเองพร้อมระบบกราฟเรดาร์
-*   [page5.php](file:///c:/xampp/htdocs/Checklist/page5.php): หน้าประเมินเกณฑ์การควบคุมและติดตามคุณภาพข้อมูล
-
-### 4. 🎛️ หน้าประเมินรวมสเต็ปเดียว (Combined Form)
-*   [dqa_combined.php](file:///c:/xampp/htdocs/Checklist/dqa_combined.php): **หน้าที่รวมหน้าฟอร์มทั้งหมดไว้เป็นหน้าเดียว** คัดลอกข้อมูลและเกณฑ์ของหน้าดั้งเดิมมาครบถ้วน พร้อมระบบนำทาง Stepper และ Javascript Engine ควบคุมการประเมินเบ็ดเสร็จ
-
-### 5. 🖥️ หน้าแสดงผลและภาพรวม (Views & Dashboard)
+### 3. 🖥️ หน้าแสดงผลและภาพรวมหลัก (Main System Pages)
+*   [index.php](file:///c:/xampp/htdocs/Checklist/index.php): **แบบตรวจประเมินคุณภาพ (DQA Checklist) รวมทุกขั้นตอนในหน้าเดียว** (รวมข้อมูลทั่วไป, มิติคุณภาพข้อมูล, แบบประเมินตนเอง, เกณฑ์การควบคุมติดตาม และกราฟเรดาร์)
+*   [new.php](file:///c:/xampp/htdocs/Checklist/new.php): ทำความสะอาด Session การประเมินเดิม แล้วส่งไปยังหน้าประเมินรวมหลัก
+*   [edit.php](file:///c:/xampp/htdocs/Checklist/edit.php): รับ ID แบบประเมินเพื่อตั้งค่าลงใน Session สำหรับเปิดขึ้นมาแก้ไขข้อมูลบนฟอร์มรวมหลัก
 *   [dashboard.php](file:///c:/xampp/htdocs/Checklist/dashboard.php): หน้ารายการประเมินคุณภาพทั้งหมด แสดงสถิติจำนวนฟอร์มที่กรอกเสร็จและแบบร่าง ค้นหาตามชื่อชุดข้อมูล กรองข้อมูลตามหน่วยงาน และลบข้อมูลได้
 *   [view.php](file:///c:/xampp/htdocs/Checklist/view.php): หน้าดูรายงานผลแบบประเมินคุณภาพฉบับเต็มอย่างเป็นทางการ เพื่อความสะดวกในการพิมพ์และเก็บหลักฐานอ้างอิง
 
-### 6. 🎨 สไตล์ชีตและรูปภาพ (Assets & Styles)
+### 4. 🗂️ โฟลเดอร์ระบบประเมินดั้งเดิมแบบแยกหน้า (Original Step forms)
+> [!NOTE]
+> โฟลเดอร์ `old_pages/` ถูกสร้างขึ้นเพื่อแยกเก็บไฟล์ระบบเก่าให้เป็นสัดส่วน โดยไฟล์ทั้งหมดถูกปรับปรุงเส้นทางภายใน (Assets & DB Include) ให้ทำงานร่วมกับ API ตัวกลางได้อย่างสมบูรณ์
+
+*   [old_pages/index.php](file:///c:/xampp/htdocs/Checklist/old_pages/index.php): ส่วนที่ 1: ข้อมูลทั่วไปของข้อมูลและหน่วยงาน (แบบเดิม)
+*   [old_pages/page3.php](file:///c:/xampp/htdocs/Checklist/old_pages/page3.php): ส่วนที่ 2: เกณฑ์ประเมินคุณภาพข้อมูลใน 5 มิติ (แบบเดิม)
+*   [old_pages/page4.php](file:///c:/xampp/htdocs/Checklist/old_pages/page4.php): ส่วนที่ 3: แบบประเมินตนเองและกราฟใยแมงมุมเรดาร์ (แบบเดิม)
+*   [old_pages/page5.php](file:///c:/xampp/htdocs/Checklist/old_pages/page5.php): ส่วนที่ 4: การควบคุมและติดตามคุณภาพข้อมูล (แบบเดิม)
+*   [old_pages/new.php](file:///c:/xampp/htdocs/Checklist/old_pages/new.php): ทำความสะอาด Session และเริ่มทำแบบประเมินแยกหน้า
+*   [old_pages/edit.php](file:///c:/xampp/htdocs/Checklist/old_pages/edit.php): โหลด Session และแก้ไขข้อมูลบนแบบประเมินแยกหน้า
+
+### 5. 🎨 สไตล์ชีตและรูปภาพ (Assets & Styles)
 *   [style.css](file:///c:/xampp/htdocs/Checklist/assets/css/style.css): ควบคุมสไตล์และธีมความสวยงามของทุกหน้าเว็บอิงตามอัตลักษณ์สีน้ำเงิน-ทอง (MOC Blue & Gold)
-*   [app.js](file:///c:/xampp/htdocs/Checklist/assets/js/app.js): คุมการทำงานฟังก์ชั่น autosave ในเวอร์ชันฟอร์มแบบแยกหน้าเดิม
+*   [app.js](file:///c:/xampp/htdocs/Checklist/assets/js/app.js): คุมการทำงานฟังก์ชั่น autosave และการตรวจสอบข้อมูลของระบบฟอร์มแยกหน้าดั้งเดิม (ในโฟลเดอร์ `old_pages/`)
 *   [ops-logo.jpg](file:///c:/xampp/htdocs/Checklist/assets/images/ops-logo.jpg): โลโก้ของสำนักงานปลัดกระทรวงพาณิชย์
 
 ---
@@ -98,5 +98,5 @@
 
 เข้าใช้งานระบบส่วนต่างๆ ผ่านทางเบราว์เซอร์ได้ดังนี้:
 *   📟 **หน้ารวมแดชบอร์ดหลัก (Dashboard):** [http://localhost/Checklist/dashboard.php](http://localhost/Checklist/dashboard.php)
-*   📝 **เริ่มทำแบบประเมินฉบับรวมหน้าเดียว:** [http://localhost/Checklist/dqa_combined.php](http://localhost/Checklist/dqa_combined.php)
-*   📝 **เริ่มทำแบบประเมินฉบับแยกหน้าแบบเดิม:** [http://localhost/Checklist/new.php](http://localhost/Checklist/new.php)
+*   📝 **เริ่มทำแบบประเมินฉบับรวมหน้าเดียว:** [http://localhost/Checklist/index.php](http://localhost/Checklist/index.php)
+*   📝 **เริ่มทำแบบประเมินฉบับแยกหน้าแบบเดิม:** [http://localhost/Checklist/old_pages/new.php](http://localhost/Checklist/old_pages/new.php)

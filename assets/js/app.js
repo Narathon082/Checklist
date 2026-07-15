@@ -8,10 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
 
+    // Dynamic API endpoint path depending on current directory
+    const apiPath = window.location.pathname.includes('/old_pages/') ? '../api.php' : 'api.php';
+
     // Load data from Server (api.php)
     async function loadData() {
         try {
-            const response = await fetch('api.php');
+            const response = await fetch(apiPath);
             if (response.ok) {
                 const data = await response.json();
                 populateForm(data);
@@ -75,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = getFormData();
         
         try {
-            const response = await fetch('api.php', {
+            const response = await fetch(apiPath, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -349,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.reset();
                     localStorage.removeItem('dqa_checklist_draft');
                     try {
-                        const response = await fetch('api.php?reset=1', { method: 'POST' });
+                        const response = await fetch(apiPath + '?reset=1', { method: 'POST' });
                         if (response.ok) {
                             const result = await response.json();
                             showToast(result.message || 'ล้างข้อมูลทั้งหมดเรียบร้อยแล้ว');
