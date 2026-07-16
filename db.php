@@ -8,7 +8,7 @@ $db_pass = '';
 $db_name = 'checklist';
 
 // 1. Establish connection to MySQL server
-$conn = @new mysqli($db_host, $db_user, $db_pass);
+$conn = @new mysqli($db_host, $db_user, $db_pass, null);
 
 if ($conn->connect_error) {
     header('Content-Type: application/json; charset=utf-8');
