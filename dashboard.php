@@ -329,8 +329,11 @@ if ($agenciesQuery) {
                     <span class="agency-tag">ระบบติดตามและจัดการแบบตรวจประเมินคุณภาพข้อมูล</span>
                 </div>
             </div>
-            <div>
-                <a href="new.php" class="btn btn-primary">
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <a href="admin_settings.php" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                    <i data-lucide="settings"></i> ตั้งค่าระบบ
+                </a>
+                <a href="new.php" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
                     <i data-lucide="plus-circle"></i> ทำแบบประเมินใหม่
                 </a>
             </div>
