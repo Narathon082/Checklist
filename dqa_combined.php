@@ -556,9 +556,15 @@ function renderStep1FieldRaw($field) {
                             if (empty($cat_fields)) continue;
                             $dim_index++;
                         ?>
-                            <div style="background-color: #dbeafe; color: var(--moc-blue-deep); padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem;">
-                                <?php echo $dim_index; ?>. <?php echo htmlspecialchars($cat['title']); ?>
+                            <div class="dimension-sub-bar" style="margin-top: 3rem;">
+                                <h4><?php echo $dim_index; ?>. <?php echo htmlspecialchars($cat['title']); ?></h4>
                             </div>
+
+                            <?php if (!empty($cat['description'])): ?>
+                                <div class="dimension-desc-box" style="margin-bottom: 1.5rem;">
+                                    <?php echo htmlspecialchars($cat['description']); ?>
+                                </div>
+                            <?php endif; ?>
 
                             <?php foreach ($cat_fields as $f): 
                                 $code = htmlspecialchars($f['field_code']);

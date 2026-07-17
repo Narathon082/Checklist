@@ -1150,6 +1150,19 @@ if ($fieldsRes) {
         const tabButtons = document.querySelectorAll(".admin-tab-btn");
         const panels = document.querySelectorAll(".admin-panel");
 
+        // Restore active tab from localStorage if exists
+        const activeTab = localStorage.getItem("adminActiveTab");
+        if (activeTab) {
+            const activeBtn = document.querySelector(`.admin-tab-btn[data-target="${activeTab}"]`);
+            if (activeBtn) {
+                tabButtons.forEach(b => b.classList.remove("active"));
+                panels.forEach(p => p.classList.remove("active"));
+                activeBtn.classList.add("active");
+                const targetPanel = document.getElementById(activeTab);
+                if (targetPanel) targetPanel.classList.add("active");
+            }
+        }
+
         tabButtons.forEach(btn => {
             btn.addEventListener("click", () => {
                 const target = btn.dataset.target;
@@ -1159,7 +1172,19 @@ if ($fieldsRes) {
                 
                 btn.classList.add("active");
                 document.getElementById(target).classList.add("active");
+                
+                // Save active tab to localStorage
+                localStorage.setItem("adminActiveTab", target);
             });
+        });
+
+        // Restore scroll position from localStorage if exists
+        window.addEventListener("load", () => {
+            const scrollPos = localStorage.getItem("adminScrollPosition");
+            if (scrollPos) {
+                window.scrollTo(0, parseInt(scrollPos));
+                localStorage.removeItem("adminScrollPosition");
+            }
         });
 
         // Toast Helper
@@ -1218,7 +1243,10 @@ if ($fieldsRes) {
                 if (res.status === 'success') {
                     showToast(res.message, 'success');
                     closeAgencyModal();
-                    setTimeout(() => location.reload(), 800);
+                    setTimeout(() => {
+                        localStorage.setItem("adminScrollPosition", window.scrollY);
+                        location.reload();
+                    }, 800);
                 } else {
                     showToast(res.message, 'error');
                 }
@@ -1340,10 +1368,10 @@ if ($fieldsRes) {
         }
 
         // --- Metadata Save Handler ---
-        document.querySelectorAll(".metadata-form").forEach(form => {
-            form.addEventListener("submit", function(e) {
+        document.addEventListener("submit", function(e) {
+            const formEl = e.target;
+            if (formEl && formEl.classList.contains("metadata-form")) {
                 e.preventDefault();
-                const formEl = e.target;
                 const data = new FormData(formEl);
                 
                 fetch(formEl.action, {
@@ -1359,7 +1387,7 @@ if ($fieldsRes) {
                     }
                 })
                 .catch(err => showToast('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'error'));
-            });
+            }
         });
 
         // --- Category options by step mapping ---
@@ -1498,7 +1526,10 @@ if ($fieldsRes) {
                 if (res.status === 'success') {
                     showToast(res.message, 'success');
                     closeFieldModal();
-                    setTimeout(() => location.reload(), 800);
+                    setTimeout(() => {
+                        localStorage.setItem("adminScrollPosition", window.scrollY);
+                        location.reload();
+                    }, 800);
                 } else {
                     showToast(res.message, 'error');
                 }
@@ -1612,7 +1643,10 @@ if ($fieldsRes) {
                 if (res.status === 'success') {
                     showToast(res.message, 'success');
                     closeCategoryModal();
-                    setTimeout(() => location.reload(), 800);
+                    setTimeout(() => {
+                        localStorage.setItem("adminScrollPosition", window.scrollY);
+                        location.reload();
+                    }, 800);
                 } else {
                     showToast(res.message, 'error');
                 }
@@ -1651,7 +1685,10 @@ if ($fieldsRes) {
                         if (res.status === 'success') {
                             showToast(res.message, 'success');
                             row.remove();
-                            setTimeout(() => location.reload(), 800); // Reload to update selects
+                            setTimeout(() => {
+                                localStorage.setItem("adminScrollPosition", window.scrollY);
+                                location.reload();
+                            }, 800); // Reload to update selects
                         } else {
                             showToast(res.message, 'error');
                         }
