@@ -782,9 +782,57 @@ if ($fieldsRes) {
 
         <!-- PANEL 3: Step 1 Fields -->
         <section id="panel-step1" class="admin-panel">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="color: var(--moc-blue-deep);"><i data-lucide="align-left"></i> ฟิลด์ข้อความทั่วไปหน้า 1</h3>
-                <button type="button" class="btn btn-primary" onclick="openFieldModal(1, 'info_general')"><i data-lucide="plus-circle"></i> เพิ่มฟิลด์ใหม่</button>
+            <!-- กลุ่มหัวข้อขั้นตอนที่ 1 (Step 1 Categories) -->
+            <div style="margin-bottom: 2rem; border-bottom: 2px solid var(--moc-gold-light); padding-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="color: var(--moc-blue-deep); margin: 0;"><i data-lucide="folder"></i> กลุ่มส่วนหัวข้อขั้นตอนที่ 1 (Categories)</h3>
+                    <button type="button" class="btn btn-primary" onclick="openCategoryModal(1)"><i data-lucide="plus-circle"></i> เพิ่มส่วนใหม่</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="crud-table" style="font-size: 0.85rem;">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">รหัส</th>
+                                <th>ชื่อส่วน (Title)</th>
+                                <th>คำอธิบาย (Description)</th>
+                                <th style="width: 80px; text-align: center;">ลำดับ</th>
+                                <th style="width: 100px; text-align: center;">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $step1CatsExist = false;
+                            foreach ($categories as $cat): 
+                                if (intval($cat['step']) !== 1) continue;
+                                $step1CatsExist = true;
+                            ?>
+                                <tr id="cat-row-<?php echo $cat['id']; ?>">
+                                    <td class="font-bold text-center"><?php echo htmlspecialchars($cat['code']); ?></td>
+                                    <td class="cat-title" style="font-weight: 600; color: var(--moc-blue-deep);"><?php echo htmlspecialchars($cat['title']); ?></td>
+                                    <td class="cat-desc" style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.4;"><?php echo htmlspecialchars($cat['description']); ?></td>
+                                    <td class="cat-order text-center"><?php echo $cat['sort_order']; ?></td>
+                                    <td class="text-center">
+                                        <div class="btn-action-group" style="justify-content: center;">
+                                            <button type="button" class="btn-mini btn-mini-edit" onclick='openCategoryModal(1, <?php echo json_encode($cat, JSON_UNESCAPED_UNICODE); ?>)' title="แก้ไข"><i data-lucide="pencil" style="width:12px; height:12px;"></i></button>
+                                            <button type="button" class="btn-mini btn-mini-delete" data-code="<?php echo htmlspecialchars($cat['code'], ENT_QUOTES); ?>" data-title="<?php echo htmlspecialchars($cat['title'], ENT_QUOTES); ?>" onclick="deleteCategory(this, <?php echo $cat['id']; ?>)" title="ลบ"><i data-lucide="trash-2" style="width:12px; height:12px;"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; 
+                            if (!$step1CatsExist): ?>
+                                <tr>
+                                    <td colspan="5" class="text-center" style="color: var(--text-muted); font-style: italic; padding: 1.5rem;">ยังไม่มีการแบ่งส่วนในขั้นตอนนี้</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- รายการฟิลด์ขั้นตอนที่ 1 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; margin-top: 1rem;">
+                <h3 style="color: var(--moc-blue-deep); margin: 0;"><i data-lucide="align-left"></i> ฟิลด์ข้อความทั่วไปหน้า 1 (Fields)</h3>
+                <button type="button" class="btn btn-primary" onclick="openFieldModal(1)"><i data-lucide="plus-circle"></i> เพิ่มฟิลด์ใหม่</button>
             </div>
             <?php renderFieldsTable($fields, 1); ?>
             <?php renderStepMetadataForm($metadata, 1); ?>
@@ -1317,7 +1365,11 @@ if ($fieldsRes) {
         // --- Category options by step mapping ---
         const stepCategories = {
             1: [
-                { code: 'info_general', title: 'ข้อมูลทั่วไป (info_general)' }
+                <?php foreach ($categories as $cat): ?>
+                    <?php if (intval($cat['step']) === 1): ?>
+                        { code: <?php echo json_encode($cat['code']); ?>, title: <?php echo json_encode($cat['title'] . ' (' . $cat['code'] . ')'); ?> },
+                    <?php endif; ?>
+                <?php endforeach; ?>
             ],
             2: [
                 <?php foreach ($categories as $cat): ?>
@@ -1509,8 +1561,15 @@ if ($fieldsRes) {
             
             stepInput.value = step;
             
+            const typeGroup = typeSelect.closest('.form-group');
+            if (step === 1) {
+                if (typeGroup) typeGroup.style.display = 'none';
+            } else {
+                if (typeGroup) typeGroup.style.display = 'block';
+            }
+            
             if (cat) {
-                title.innerText = "แก้ไขกลุ่มหัวข้อประเมิน";
+                title.innerText = step === 1 ? "แก้ไขกลุ่มส่วนฟิลด์" : "แก้ไขกลุ่มหัวข้อประเมิน";
                 subAction.value = "save";
                 idInput.value = cat.id;
                 codeInput.value = cat.code;
@@ -1521,7 +1580,7 @@ if ($fieldsRes) {
                 typeSelect.value = cat.category_type || 'risk';
                 sortInput.value = cat.sort_order || 10;
             } else {
-                title.innerText = "เพิ่มกลุ่มหัวข้อใหม่";
+                title.innerText = step === 1 ? "เพิ่มส่วนใหม่" : "เพิ่มกลุ่มหัวข้อใหม่";
                 subAction.value = "save";
                 idInput.value = 0;
                 codeInput.value = "";

@@ -237,6 +237,14 @@ function renderStep1FieldRaw($field) {
                                 <?php renderStep1FieldRaw($step1_fields['info_mission'] ?? null); ?>
                             </div>
                         </div>
+
+                        <?php 
+                        foreach ($step1_fields as $code => $f) {
+                            if (!in_array($code, ['info_title', 'info_agency', 'info_mission']) && ($f['category'] === 'INFO_GENERAL' || $f['category'] === 'info_general')) {
+                                renderStep1Field($f);
+                            }
+                        }
+                        ?>
                     </fieldset>
 
                     <!-- SECTION 2: ตัวชี้วัดและเป้าหมาย -->
@@ -248,6 +256,12 @@ function renderStep1FieldRaw($field) {
                         renderStep1Field($step1_fields['metric_link'] ?? null);
                         renderStep1Field($step1_fields['metric_result'] ?? null);
                         renderStep1Field($step1_fields['metric_source'] ?? null);
+
+                        foreach ($step1_fields as $code => $f) {
+                            if (!in_array($code, ['metric_name', 'metric_link', 'metric_result', 'metric_source']) && $f['category'] === 'INFO_METRIC') {
+                                renderStep1Field($f);
+                            }
+                        }
                         ?>
                     </fieldset>
 
@@ -269,6 +283,14 @@ function renderStep1FieldRaw($field) {
                                 <?php renderStep1FieldRaw($step1_fields['metric_standard_detail'] ?? null); ?>
                             </div>
                         </div>
+
+                        <?php 
+                        foreach ($step1_fields as $code => $f) {
+                            if (!in_array($code, ['source_partner', 'source_period', 'metric_standard_type', 'metric_standard_detail']) && $f['category'] === 'INFO_SOURCE') {
+                                renderStep1Field($f);
+                            }
+                        }
+                        ?>
                     </fieldset>
 
                     <!-- SECTION 4: การประเมินผลและอนุมัติ -->
@@ -288,9 +310,50 @@ function renderStep1FieldRaw($field) {
                         </div>
 
                         <?php renderStep1Field($step1_fields['eval_approver'] ?? null); ?>
+
+                        <?php 
+                        foreach ($step1_fields as $code => $f) {
+                            if (!in_array($code, ['eval_method', 'eval_date', 'eval_team', 'eval_approver']) && $f['category'] === 'INFO_EVAL') {
+                                renderStep1Field($f);
+                            }
+                        }
+                        ?>
                     </fieldset>
 
-                    <!-- RENDER ANY CUSTOM FIELDS ADDED DYNAMICALLY TO STEP 1 -->
+                    <!-- RENDER ANY CUSTOM SECTIONS & FIELDS IN STEP 1 -->
+                    <?php
+                    $standard_step1_categories = ['INFO_GENERAL', 'INFO_METRIC', 'INFO_SOURCE', 'INFO_EVAL', 'info_general'];
+                    $step1_cats_db = $form_categories[1] ?? [];
+                    foreach ($step1_cats_db as $cat_data) {
+                        $cat_code = $cat_data['code'];
+                        if (in_array($cat_code, $standard_step1_categories)) continue; // Already rendered standard sections
+                        
+                        $cat_fields = [];
+                        foreach ($step1_fields as $code => $f) {
+                            if ($f['category'] === $cat_code) {
+                                $cat_fields[] = $f;
+                            }
+                        }
+                        if (empty($cat_fields)) continue;
+                        ?>
+                        <fieldset class="form-section">
+                            <legend><i data-lucide="plus-circle"></i> <?php echo htmlspecialchars($cat_data['title']); ?></legend>
+                            <?php if (!empty($cat_data['description'])): ?>
+                                <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                                    <?php echo htmlspecialchars($cat_data['description']); ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php 
+                            foreach ($cat_fields as $f) {
+                                renderStep1Field($f);
+                            }
+                            ?>
+                        </fieldset>
+                        <?php
+                    }
+                    ?>
+
+                    <!-- FALLBACK FOR ANY OTHER CUSTOM FIELDS WITHOUT A REGISTERED CATEGORY -->
                     <?php
                     $standard_step1_codes = [
                         'info_title', 'info_agency', 'info_mission', 'metric_name', 'metric_link', 
@@ -298,17 +361,23 @@ function renderStep1FieldRaw($field) {
                         'metric_standard_type', 'metric_standard_detail', 'eval_method', 
                         'eval_date', 'eval_team', 'eval_approver'
                     ];
-                    $has_custom = false;
+                    $registered_step1_categories = [];
+                    foreach ($step1_cats_db as $c) {
+                        $registered_step1_categories[] = $c['code'];
+                    }
+                    $registered_step1_categories[] = 'info_general'; // default fallback
+                    
+                    $has_unregistered = false;
                     foreach ($step1_fields as $code => $f) {
-                        if (!in_array($code, $standard_step1_codes)) {
-                            if (!$has_custom) {
+                        if (!in_array($code, $standard_step1_codes) && !in_array($f['category'], $registered_step1_categories)) {
+                            if (!$has_unregistered) {
                                 echo '<fieldset class="form-section"><legend><i data-lucide="plus-circle"></i> ข้อมูลเพิ่มเติมอื่น ๆ</legend>';
-                                $has_custom = true;
+                                $has_unregistered = true;
                             }
                             renderStep1Field($f);
                         }
                     }
-                    if ($has_custom) {
+                    if ($has_unregistered) {
                         echo '</fieldset>';
                     }
                     ?>
