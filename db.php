@@ -791,5 +791,29 @@ if ($checkStep1Cats && $checkStep1Cats->fetch_assoc()['count'] == 0) {
     $conn->query("UPDATE `form_fields` SET `category` = 'INFO_SOURCE' WHERE `field_code` IN ('source_partner', 'source_period', 'metric_standard_type', 'metric_standard_detail') AND `step` = 1");
     $conn->query("UPDATE `form_fields` SET `category` = 'INFO_EVAL' WHERE `field_code` IN ('eval_method', 'eval_date', 'eval_team', 'eval_approver') AND `step` = 1");
 }
+
+// Check and auto-insert Step 4 General Info category
+$checkS4Cat = $conn->query("SELECT id FROM `form_categories` WHERE `step` = 4 AND `code` = 'INFO_GENERAL_S4'");
+if ($checkS4Cat && $checkS4Cat->num_rows === 0) {
+    $conn->query("INSERT INTO `form_categories` (step, code, title, description, category_type, sort_order) VALUES (4, 'INFO_GENERAL_S4', 'ข้อมูลทั่วไป (ขั้นตอนที่ 4)', 'รายละเอียดบริการ ผู้รับผิดชอบ และวันที่ตรวจการควบคุมคุณภาพ', 'yesno', 5)");
+}
+
+// Check and auto-insert Step 4 General Info fields
+$checkS4Fields = $conn->query("SELECT COUNT(*) as count FROM `form_fields` WHERE `step` = 4 AND `category` = 'INFO_GENERAL_S4'");
+if ($checkS4Fields && $checkS4Fields->fetch_assoc()['count'] == 0) {
+    $s4Fields = [
+        [4, 'INFO_GENERAL_S4', 'info_service', 'บริการ', 'เช่น ข้อมูลสถิติการค้า', 'textarea', 1, 10],
+        [4, 'INFO_GENERAL_S4', 'info_head', 'หัวหน้า กอง/สำนัก/ฝ่าย/ศูนย์ และ/หรือ บริการ', 'เช่น ผู้อำนวยการศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร', 'textarea', 1, 20],
+        [4, 'INFO_GENERAL_S4', 'control_date', 'วันที่ประเมินผลควบคุม', '', 'date', 1, 30]
+    ];
+    $stmt = $conn->prepare("INSERT INTO `form_fields` (step, category, field_code, label, description, field_type, is_required, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    if ($stmt) {
+        foreach ($s4Fields as $f) {
+            $stmt->bind_param("isssssii", $f[0], $f[1], $f[2], $f[3], $f[4], $f[5], $f[6], $f[7]);
+            $stmt->execute();
+        }
+        $stmt->close();
+    }
+}
 ?>
 

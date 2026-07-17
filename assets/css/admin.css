@@ -22,7 +22,7 @@
     gap: 0.5rem;
 }
 
-.admin-tabs {
+.admin-tabs {   
     display: flex;
     gap: 0.5rem;
     background: white;

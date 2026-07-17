@@ -27,6 +27,13 @@ $step2_fields = [];
 $step3_fields = [];
 $step4_fields = [];
 
+$required_fields_by_step = [
+    0 => [], // Step 1
+    1 => [], // Step 2
+    2 => [], // Step 3
+    3 => []  // Step 4
+];
+
 $fieldsRes = $conn->query("SELECT * FROM `form_fields` WHERE `status` = 'active' ORDER BY `sort_order` ASC, `id` ASC");
 if ($fieldsRes) {
     while ($r = $fieldsRes->fetch_assoc()) {
@@ -41,9 +48,21 @@ if ($fieldsRes) {
         } elseif ($step === 4) {
             $step4_fields[$cat][] = $r;
         }
+        
+        // Save required fields
+        if (intval($r['is_required']) === 1) {
+            $step_idx = $step - 1;
+            if ($step_idx >= 0 && $step_idx <= 3) {
+                $required_fields_by_step[$step_idx][] = [
+                    'code' => $r['field_code'],
+                    'label' => $r['label'],
+                    'type' => $r['field_type'],
+                    'category' => $r['category']
+                ];
+            }
+        }
     }
 }
-
 // Rendering helpers for Step 1
 function renderStep1Field($field) {
     if (!$field) return;
@@ -203,7 +222,7 @@ function renderStep1FieldRaw($field) {
 
         <!-- Main Form Paper -->
         <main class="document-paper">
-            <form id="dqa-form" method="POST" action="api.php">
+            <form id="dqa-form" method="POST" action="api.php" novalidate>
                 
                 <!-- ================= STEP 1: index.php ================= -->
                 <div id="step-1" class="form-step active">
@@ -695,26 +714,19 @@ function renderStep1FieldRaw($field) {
                             <input type="text" id="info-agency-display-s4" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
                         </div>
 
-                        <div class="form-group">
-                            <label for="info-service" class="text-bold">บริการ : <span style="color:#ef4444;">*</span></label>
-                            <textarea id="info-service" name="info_service" rows="2" placeholder="ข้อมูลสถิติการค้า"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="info-head" class="text-bold">หัวหน้า กอง/สำนัก/ฝ่าย/ศูนย์ และ/หรือ บริการ : <span style="color:#ef4444;">*</span></label>
-                            <textarea id="info-head" name="info_head" rows="2" placeholder="ผู้อำนวยการศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="control-date" class="text-bold">วันที่ประเมินผลควบคุม : <span style="color:#ef4444;">*</span></label>
-                            <input type="date" id="control-date" name="control_date" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: #ffffff;">
-                        </div>
+                        <?php
+                        $s4_general_fields = $step4_fields['INFO_GENERAL_S4'] ?? [];
+                        foreach ($s4_general_fields as $f) {
+                            renderStep1Field($f);
+                        }
+                        ?>
                     </fieldset>
 
                     <?php
                     $step4_cats_db = $form_categories[4] ?? [];
                     foreach ($step4_cats_db as $cat_data) {
                         $cat = $cat_data['code'];
+                        if ($cat === 'INFO_GENERAL_S4') continue;
                         $cat_fields = $step4_fields[$cat] ?? [];
                         if (empty($cat_fields)) continue;
                         
@@ -825,6 +837,7 @@ function renderStep1FieldRaw($field) {
         const stepperProgress = document.getElementById("stepper-progress");
         
         let currentStep = 0;
+        const requiredFieldsByStep = <?php echo json_encode($required_fields_by_step, JSON_UNESCAPED_UNICODE); ?>;
 
         // --- 0. ระบบประสานข้อมูล "ชื่อข้อมูล" และ "หน่วยงาน" ไปยังหน้าต่างๆ ---
         const infoTitle = document.getElementById('info_title');
@@ -1223,109 +1236,67 @@ function renderStep1FieldRaw($field) {
             let isValid = true;
             const errors = [];
 
-            if (stepIndex === 0) {
-                const reqs = [
-                    { id: 'info_title', name: 'ชื่อข้อมูล' },
-                    { id: 'info_agency', name: 'ชื่อหน่วยงานที่ดำเนินงาน' },
-                    { id: 'metric_name', name: 'ชื่อตัวชี้วัดผลการประเมินคุณภาพข้อมูล' },
-                    { id: 'metric_source', name: 'แหล่งที่มาข้อมูล' },
-                    { id: 'eval_date', name: 'วันที่ประเมินคุณภาพข้อมูล' },
-                    { id: 'eval_team', name: 'ทีมผู้ประเมินคุณภาพข้อมูล' },
-                    { id: 'eval_approver', name: 'ผู้อนุมัติการประเมินคุณภาพข้อมูล' }
-                ];
-                reqs.forEach(field => {
-                    const el = document.getElementById(field.id);
-                    if (el && !el.value.trim()) {
-                        el.classList.add('input-error');
-                        isValid = false;
-                        if (!errors.includes(field.name)) errors.push(field.name);
-                    }
-                });
-            } else if (stepIndex === 1) {
-                const checkRadios = [
-                    'ac1_status', 'ac2_status', 'ac3_status', 'ac4_status', 'ac5_status', 'ac6_status', 'ac7_status', 'ac8_status',
-                    're1_status', 're2_status', 're3_status', 're4_status', 're5_status',
-                    'co1_status', 'co2_status', 'co3_status', 'co4_status',
-                    'ti1_status', 'ti2_status', 'ti3_status', 'ti4_status', 'ti5_status',
-                    'av1_status', 'av2_status', 'av3_status', 'av4_status'
-                ];
-                let unselected = 0;
-                checkRadios.forEach(name => {
-                    const checked = form.querySelector(`input[name="${name}"]:checked`);
-                    if (!checked) {
-                        isValid = false;
-                        unselected++;
-                        const firstRadio = form.querySelector(`input[name="${name}"]`);
-                        if (firstRadio) {
-                            const tr = firstRadio.closest('tr');
-                            if (tr) tr.classList.add('row-error');
-                        }
-                    }
-                });
-                if (unselected > 0) {
-                    errors.push(`เกณฑ์ประเมินมิติคุณภาพข้อมูลยังเลือกไม่ครบ ${unselected} หัวข้อ`);
-                }
-            } else if (stepIndex === 2) {
-                const selfCheckRadios = [
-                    'sa_1_1', 'sa_1_2', 'sa_1_3', 'sa_1_4', 'sa_1_5',
-                    'sa_2_1', 'sa_2_2', 'sa_2_3', 'sa_2_4', 'sa_2_5', 'sa_2_6',
-                    'sa_3_1', 'sa_3_2',
-                    'sa_4_1', 'sa_4_2', 'sa_4_3', 'sa_4_4',
-                    'sa_5_1', 'sa_5_2', 'sa_5_3', 'sa_5_4', 'sa_5_5'
-                ];
-                let unselected = 0;
-                selfCheckRadios.forEach(name => {
-                    const checked = form.querySelector(`input[name="${name}"]:checked`);
-                    if (!checked) {
-                        isValid = false;
-                        unselected++;
-                        const firstRadio = form.querySelector(`input[name="${name}"]`);
-                        if (firstRadio) {
-                            const card = firstRadio.closest('.self-assess-card');
-                            if (card) card.classList.add('card-error');
-                        }
-                    }
-                });
-                if (unselected > 0) {
-                    errors.push(`แบบประเมินตนเองระดับคุณภาพยังเลือกไม่ครบ ${unselected} หัวข้อ`);
-                }
-            } else if (stepIndex === 3) {
-                const reqs = [
-                    { id: 'info-service', name: 'บริการ' },
-                    { id: 'info-head', name: 'หัวหน้า กอง/สำนัก/ฝ่าย/ศูนย์' },
-                    { id: 'control-date', name: 'วันที่ประเมินผลควบคุม' }
-                ];
-                reqs.forEach(field => {
-                    const el = document.getElementById(field.id);
-                    if (el && !el.value.trim()) {
-                        el.classList.add('input-error');
-                        isValid = false;
-                        if (!errors.includes(field.name)) errors.push(field.name);
-                    }
-                });
+            // Get dynamic list of required fields for this step
+            const reqs = requiredFieldsByStep[stepIndex] || [];
+            let unselectedCount = 0;
 
-                const controlRadios = [
-                    'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7',
-                    'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7',
-                    's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9',
-                    'e1', 'e2', 'e3', 'e4',
-                    'd1', 'd2', 'd3', 'd4', 'r1'
-                ];
-                let unselected = 0;
-                controlRadios.forEach(name => {
-                    const checked = form.querySelector(`input[name="${name}"]:checked`);
+            reqs.forEach(field => {
+                const code = field.code;
+                const label = field.label;
+                
+                // Determine validation behavior based on step index (Step 2, 3, 4 evaluation fields are always radios in HTML)
+                let isRadio = false;
+                let inputName = code;
+
+                if (stepIndex === 1) { // Step 2 (Index 1) is always radios with _status suffix
+                    isRadio = true;
+                    inputName = code + '_status';
+                } else if (stepIndex === 2) { // Step 3 (Index 2) is always radios
+                    isRadio = true;
+                } else if (stepIndex === 3) { // Step 4 (Index 3)
+                    if (field.category !== 'INFO_GENERAL_S4' && field.category !== 'info_general_s4') {
+                        isRadio = true;
+                    }
+                }
+
+                if (isRadio) {
+                    const checked = form.querySelector(`input[name="${inputName}"]:checked`);
                     if (!checked) {
                         isValid = false;
-                        unselected++;
-                        const firstRadio = form.querySelector(`input[name="${name}"]`);
+                        unselectedCount++;
+                        
+                        // Add validation styling error indicators
+                        const firstRadio = form.querySelector(`input[name="${inputName}"]`);
                         if (firstRadio) {
-                            const tr = firstRadio.closest('tr');
-                            if (tr) tr.classList.add('row-error');
+                            if (stepIndex === 2) { // Step 3 cards
+                                const card = firstRadio.closest('.self-assess-card');
+                                if (card) card.classList.add('card-error');
+                            } else { // Tables
+                                const tr = firstRadio.closest('tr');
+                                if (tr) tr.classList.add('row-error');
+                            }
                         }
                     }
-                });
-                if (unselected > 0) {
-                    errors.push(`เกณฑ์ประเมินการควบคุมติดตามคุณภาพยังเลือกไม่ครบ ${unselected} หัวข้อ`);
+                } else {
+                    // For standard inputs (text, textarea, select, date)
+                    const el = document.getElementById(code);
+                    if (el && !el.value.trim()) {
+                        el.classList.add('input-error');
+                        isValid = false;
+                        errors.push(label);
+                    }
+                }
+            });
+
+            if (unselectedCount > 0) {
+                if (stepIndex === 1) {
+                    errors.push(`เกณฑ์ประเมินมิติคุณภาพข้อมูลยังเลือกไม่ครบ ${unselectedCount} หัวข้อ`);
+                } else if (stepIndex === 2) {
+                    errors.push(`แบบประเมินตนเองระดับคุณภาพยังเลือกไม่ครบ ${unselectedCount} หัวข้อ`);
+                } else if (stepIndex === 3) {
+                    errors.push(`เกณฑ์ประเมินการควบคุมติดตามคุณภาพยังเลือกไม่ครบ ${unselectedCount} หัวข้อ`);
+                } else {
+                    errors.push(`คำถามประเมินยังไม่ได้เลือกตอบอีก ${unselectedCount} ข้อ`);
                 }
             }
 

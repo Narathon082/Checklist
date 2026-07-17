@@ -245,15 +245,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
         } elseif ($subAction === 'delete') {
             $id = intval($_POST['id'] ?? 0);
             if ($id > 0) {
-                $stmt = $conn->prepare("DELETE FROM `form_categories` WHERE id = ?");
-                if ($stmt) {
-                    $stmt->bind_param("i", $id);
-                    if ($stmt->execute()) {
-                        $response = ['status' => 'success', 'message' => 'ลบหัวข้อประเมินสำเร็จ'];
-                    } else {
-                        $response = ['status' => 'error', 'message' => 'ไม่สามารถลบหัวข้อประเมินได้: ' . $conn->error];
+                // Find the category code and step to clean up fields
+                $catQuery = $conn->query("SELECT code, step FROM `form_categories` WHERE id = $id");
+                if ($catQuery && $catRow = $catQuery->fetch_assoc()) {
+                    $catCode = $catRow['code'];
+                    $catStep = intval($catRow['step']);
+                    
+                    $conn->begin_transaction();
+                    try {
+                        // Delete matching fields under this category
+                        // Note: If the category step is 2, it might have fields in step 2 AND step 3 (self-assessment reuses step 2 categories!)
+                        if ($catStep === 2) {
+                            $stmtFields = $conn->prepare("DELETE FROM `form_fields` WHERE category = ? AND step IN (2, 3)");
+                        } else {
+                            $stmtFields = $conn->prepare("DELETE FROM `form_fields` WHERE category = ? AND step = ?");
+                        }
+                        
+                        if ($stmtFields) {
+                            if ($catStep === 2) {
+                                $stmtFields->bind_param("s", $catCode);
+                            } else {
+                                $stmtFields->bind_param("si", $catCode, $catStep);
+                            }
+                            $stmtFields->execute();
+                            $stmtFields->close();
+                        }
+                        
+                        // Delete the category itself
+                        $stmtCat = $conn->prepare("DELETE FROM `form_categories` WHERE id = ?");
+                        if ($stmtCat) {
+                            $stmtCat->bind_param("i", $id);
+                            $stmtCat->execute();
+                            $stmtCat->close();
+                        }
+                        
+                        $conn->commit();
+                        $response = ['status' => 'success', 'message' => 'ลบหัวข้อประเมินและเกณฑ์คำถามทั้งหมดภายใต้หัวข้อนี้สำเร็จ'];
+                    } catch (Exception $e) {
+                        $conn->rollback();
+                        $response = ['status' => 'error', 'message' => 'เกิดข้อผิดพลาดในการลบ: ' . $e->getMessage()];
                     }
-                    $stmt->close();
+                } else {
+                    $response = ['status' => 'error', 'message' => 'ไม่พบข้อมูลหัวข้อที่ต้องการลบ'];
                 }
             }
         }
@@ -287,7 +320,12 @@ if ($metaRes) {
 }
 
 $fields = [];
-$fieldsRes = $conn->query("SELECT * FROM `form_fields` ORDER BY step, sort_order ASC, id ASC");
+$fieldsRes = $conn->query("
+    SELECT f.*, c.sort_order as cat_sort 
+    FROM `form_fields` f 
+    LEFT JOIN `form_categories` c ON f.category = c.code AND c.step = (CASE WHEN f.step = 3 THEN 2 ELSE f.step END)
+    ORDER BY f.step ASC, IFNULL(cat_sort, 999) ASC, f.sort_order ASC, f.id ASC
+");
 if ($fieldsRes) {
     while ($r = $fieldsRes->fetch_assoc()) {
         $fields[] = $r;
@@ -1288,7 +1326,7 @@ if ($fieldsRes) {
                     { label: 'รหัสกลุ่มหัวข้อ (Code)', value: code },
                     { label: 'ชื่อกลุ่มหัวข้อประเมิน', value: title }
                 ],
-                warning: '* หมายเหตุ: เกณฑ์ประเมินที่อยู่ในหัวข้อนี้จะยังคงอยู่ แต่อาจแสดงผลไม่ถูกต้องจนกว่าจะแก้ไขย้ายเกณฑ์ไปอยู่กลุ่มหัวข้ออื่นแทน',
+                warning: '* คำเตือน: เกณฑ์คำถามประเมินทั้งหมด (Fields) ที่จัดอยู่ในหัวข้อประเมินนี้ จะถูกลบออกจากระบบอย่างถาวรโดยอัตโนมัติ เพื่อป้องกันปัญหาข้อมูลตกค้างในภายหลัง',
                 onConfirm: function() {
                     const data = new FormData();
                     data.append('sub_action', 'delete');
