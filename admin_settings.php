@@ -471,21 +471,32 @@ if ($fieldsRes) {
         }
 
         .btn-mini {
-            padding: 0.35rem;
-            border-radius: var(--radius-sm);
+            padding: 0.45rem;
+            border-radius: 6px;
             cursor: pointer;
             border: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: white;
+            transition: all 0.2s ease;
         }
 
-        .btn-mini-edit { background-color: var(--moc-gold); }
-        .btn-mini-delete { background-color: #ef4444; }
-        
-        .btn-mini:hover {
-            opacity: 0.85;
+        .btn-mini-edit { 
+            background-color: #f59e0b; /* Amber/gold */
+        }
+        .btn-mini-edit:hover {
+            background-color: #d97706;
+            transform: scale(1.08);
+        }
+
+        .btn-mini-delete { 
+            background-color: #ef4444; 
+        }
+        .btn-mini-delete:hover {
+            background-color: #dc2626;
+            transform: scale(1.08);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
         }
 
         /* Modal Settings */
@@ -495,33 +506,35 @@ if ($fieldsRes) {
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(15, 23, 42, 0.6); /* Modern dark backdrop */
+            backdrop-filter: blur(4px); /* Glassmorphism background blur */
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2000;
         }
 
-        .modal.open {
+        .modal.open, .modal.active {
             opacity: 1;
             pointer-events: auto;
         }
 
         .modal-content {
             background: white;
-            padding: 2rem;
+            padding: 2.25rem;
             border-radius: var(--radius-lg);
-            width: 100%;
+            width: 90%;
             max-width: 600px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bounce animation */
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        .modal.open .modal-content {
+        .modal.open .modal-content, .modal.active .modal-content {
             transform: scale(1);
         }
 
@@ -540,10 +553,93 @@ if ($fieldsRes) {
             border: none;
             cursor: pointer;
             color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }
 
         .modal-close:hover {
             color: #ef4444;
+            background: #fee2e2;
+        }
+
+        /* Beautiful Confirm Modal Specific Styles */
+        .confirm-modal-content {
+            border-top: 5px solid #ef4444 !important; /* Top red border for deletion warning */
+        }
+
+        .confirm-icon-container {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background-color: #fee2e2;
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.3); }
+            70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0); }
+        }
+
+        @keyframes pulse-amber {
+            0% { box-shadow: 0 0 0 0px rgba(245, 158, 11, 0.3); }
+            70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(245, 158, 11, 0); }
+        }
+
+        .confirm-details-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+            color: #334155;
+        }
+
+        .confirm-warning-box {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 0.85rem 1.1rem;
+            border-radius: 6px;
+            color: #b91c1c;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .btn-confirm-danger {
+            background-color: #ef4444 !important;
+            color: white !important;
+            border: none !important;
+            box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2), 0 2px 4px -1px rgba(239, 68, 68, 0.1) !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .btn-confirm-danger:hover {
+            background-color: #dc2626 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px -1px rgba(239, 68, 68, 0.3), 0 3px 6px -1px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .btn-confirm-danger:active {
+            transform: translateY(0);
         }
 
         .form-row-grid {
@@ -616,7 +712,7 @@ if ($fieldsRes) {
         <!-- Navigation Tabs -->
         <nav class="admin-tabs">
             <button type="button" class="admin-tab-btn active" data-target="panel-agencies"><i data-lucide="building"></i> รายการหน่วยงาน</button>
-            <button type="button" class="admin-tab-btn" data-target="panel-metadata"><i data-lucide="file-text"></i> คำชี้แจงและหมายเหตุ</button>
+            <button type="button" class="admin-tab-btn" data-target="panel-metadata"><i data-lucide="settings"></i> ตั้งค่าทั่วไป</button>
             <button type="button" class="admin-tab-btn" data-target="panel-step1"><i data-lucide="align-left"></i> ฟิลด์ขั้นตอนที่ 1</button>
             <button type="button" class="admin-tab-btn" data-target="panel-step2"><i data-lucide="check-square"></i> เกณฑ์มิติขั้นตอนที่ 2</button>
             <button type="button" class="admin-tab-btn" data-target="panel-step3"><i data-lucide="user-check"></i> เกณฑ์ประเมินตนเองขั้นตอนที่ 3</button>
@@ -653,7 +749,7 @@ if ($fieldsRes) {
                                 <td class="text-center">
                                     <div class="btn-action-group" style="justify-content: center;">
                                         <button type="button" class="btn-mini btn-mini-edit" onclick="openAgencyModal(<?php echo $a['id']; ?>, '<?php echo htmlspecialchars($a['name'], ENT_QUOTES); ?>')" title="แก้ไข"><i data-lucide="pencil" style="width:14px; height:14px;"></i></button>
-                                        <button type="button" class="btn-mini btn-mini-delete" onclick="deleteAgency(<?php echo $a['id']; ?>)" title="ลบ"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+                                        <button type="button" class="btn-mini btn-mini-delete" data-name="<?php echo htmlspecialchars($a['name'], ENT_QUOTES); ?>" onclick="deleteAgency(this, <?php echo $a['id']; ?>)" title="ลบ"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
                                     </div>
                                 </td>
                             </tr>
@@ -665,21 +761,21 @@ if ($fieldsRes) {
 
         <!-- PANEL 2: General & Instructions Metadata -->
         <section id="panel-metadata" class="admin-panel">
-            <form id="metadata-form" method="POST" action="admin_settings.php?action=update_metadata">
-                <h3 style="color: var(--moc-blue-deep); margin-bottom: 1.5rem;"><i data-lucide="file-text"></i> แก้ไขคำชี้แจงและหมายเหตุระบบ</h3>
+            <form class="metadata-form" method="POST" action="admin_settings.php?action=update_metadata">
+                <h3 style="color: var(--moc-blue-deep); margin-bottom: 1.5rem;"><i data-lucide="settings"></i> แก้ไขตั้งค่าทั่วไปของระบบ</h3>
                 
                 <?php foreach ($metadata as $key => $meta): 
-                    // Skip step2 and step4 category title keys as they are managed within their respective tabs
-                    if (strpos($key, 'step2_title_') === 0 || strpos($key, 'step4_title_') === 0) continue;
+                    // Only show general category settings in this panel
+                    if ($meta['category'] !== 'general') continue;
                 ?>
                     <div class="meta-form-group">
                         <label for="meta-<?php echo $key; ?>"><?php echo htmlspecialchars($meta['label']); ?></label>
-                        <textarea id="meta-<?php echo $key; ?>" name="settings[<?php echo $key; ?>]" rows="<?php echo (strpos($key, 'text') !== false) ? 6 : 2; ?>"><?php echo htmlspecialchars($meta['setting_value']); ?></textarea>
+                        <textarea id="meta-<?php echo $key; ?>" name="settings[<?php echo $key; ?>]" rows="2"><?php echo htmlspecialchars($meta['setting_value']); ?></textarea>
                     </div>
                 <?php endforeach; ?>
                 
                 <div style="margin-top: 1.5rem; text-align: right;">
-                    <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> บันทึกข้อมูลทั้งหมด</button>
+                    <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> บันทึกการตั้งค่า</button>
                 </div>
             </form>
         </section>
@@ -691,6 +787,7 @@ if ($fieldsRes) {
                 <button type="button" class="btn btn-primary" onclick="openFieldModal(1, 'info_general')"><i data-lucide="plus-circle"></i> เพิ่มฟิลด์ใหม่</button>
             </div>
             <?php renderFieldsTable($fields, 1); ?>
+            <?php renderStepMetadataForm($metadata, 1); ?>
         </section>
 
         <!-- PANEL 4: Step 2 Criteria -->
@@ -729,7 +826,7 @@ if ($fieldsRes) {
                                     <td class="text-center">
                                         <div class="btn-action-group" style="justify-content: center;">
                                             <button type="button" class="btn-mini btn-mini-edit" onclick='openCategoryModal(2, <?php echo json_encode($cat, JSON_UNESCAPED_UNICODE); ?>)' title="แก้ไข"><i data-lucide="pencil" style="width:12px; height:12px;"></i></button>
-                                            <button type="button" class="btn-mini btn-mini-delete" onclick="deleteCategory(<?php echo $cat['id']; ?>)" title="ลบ"><i data-lucide="trash-2" style="width:12px; height:12px;"></i></button>
+                                            <button type="button" class="btn-mini btn-mini-delete" data-code="<?php echo htmlspecialchars($cat['code'], ENT_QUOTES); ?>" data-title="<?php echo htmlspecialchars($cat['title'], ENT_QUOTES); ?>" onclick="deleteCategory(this, <?php echo $cat['id']; ?>)" title="ลบ"><i data-lucide="trash-2" style="width:12px; height:12px;"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -746,36 +843,20 @@ if ($fieldsRes) {
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; margin-top: 1rem;">
                 <h3 style="color: var(--moc-blue-deep); margin: 0;"><i data-lucide="check-square"></i> รายการเกณฑ์ตรวจมิติคุณภาพขั้นตอนที่ 2 (Fields)</h3>
-                <div style="display: flex; gap: 0.5rem;">
-                    <select id="select-step2-cat" class="form-control" style="width: 250px; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                        <?php foreach ($categories as $cat): ?>
-                            <?php if (intval($cat['step']) === 2): ?>
-                                <option value="<?php echo htmlspecialchars($cat['code']); ?>"><?php echo htmlspecialchars($cat['title']); ?> (<?php echo htmlspecialchars($cat['code']); ?>)</option>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="button" class="btn btn-primary" onclick="triggerAddFieldStep2()"><i data-lucide="plus-circle"></i> เพิ่มเกณฑ์ประเมิน</button>
-                </div>
+                <button type="button" class="btn btn-primary" onclick="openFieldModal(2)"><i data-lucide="plus-circle"></i> เพิ่มเกณฑ์ประเมิน</button>
             </div>
             <?php renderFieldsTable($fields, 2); ?>
+            <?php renderStepMetadataForm($metadata, 2); ?>
         </section>
 
         <!-- PANEL 6: Step 3 Self-Assessment -->
         <section id="panel-step3" class="admin-panel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <h3 style="color: var(--moc-blue-deep); margin: 0;"><i data-lucide="user-check"></i> รายการเกณฑ์ตรวจประเมินตนเองขั้นตอนที่ 3 (Fields)</h3>
-                <div style="display: flex; gap: 0.5rem;">
-                    <select id="select-step3-cat" class="form-control" style="width: 250px; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                        <?php foreach ($categories as $cat): ?>
-                            <?php if (intval($cat['step']) === 2): ?>
-                                <option value="<?php echo htmlspecialchars($cat['code']); ?>"><?php echo htmlspecialchars($cat['title']); ?> (<?php echo htmlspecialchars($cat['code']); ?>)</option>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="button" class="btn btn-primary" onclick="triggerAddFieldStep3()"><i data-lucide="plus-circle"></i> เพิ่มเกณฑ์ประเมินตนเอง</button>
-                </div>
+                <button type="button" class="btn btn-primary" onclick="openFieldModal(3)"><i data-lucide="plus-circle"></i> เพิ่มเกณฑ์ประเมินตนเอง</button>
             </div>
             <?php renderFieldsTable($fields, 3); ?>
+            <?php renderStepMetadataForm($metadata, 3); ?>
         </section>
 
         <!-- PANEL 5: Step 4 Criteria -->
@@ -814,7 +895,7 @@ if ($fieldsRes) {
                                     <td class="text-center">
                                         <div class="btn-action-group" style="justify-content: center;">
                                             <button type="button" class="btn-mini btn-mini-edit" onclick='openCategoryModal(4, <?php echo json_encode($cat, JSON_UNESCAPED_UNICODE); ?>)' title="แก้ไข"><i data-lucide="pencil" style="width:12px; height:12px;"></i></button>
-                                            <button type="button" class="btn-mini btn-mini-delete" onclick="deleteCategory(<?php echo $cat['id']; ?>)" title="ลบ"><i data-lucide="trash-2" style="width:12px; height:12px;"></i></button>
+                                            <button type="button" class="btn-mini btn-mini-delete" data-code="<?php echo htmlspecialchars($cat['code'], ENT_QUOTES); ?>" data-title="<?php echo htmlspecialchars($cat['title'], ENT_QUOTES); ?>" onclick="deleteCategory(this, <?php echo $cat['id']; ?>)" title="ลบ"><i data-lucide="trash-2" style="width:12px; height:12px;"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -831,19 +912,43 @@ if ($fieldsRes) {
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; margin-top: 1rem;">
                 <h3 style="color: var(--moc-blue-deep); margin: 0;"><i data-lucide="shield-check"></i> เกณฑ์การควบคุมและติดตามขั้นตอนที่ 4/5 (Fields)</h3>
-                <div style="display: flex; gap: 0.5rem;">
-                    <select id="select-step4-cat" class="form-control" style="width: 250px; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                        <?php foreach ($categories as $cat): ?>
-                            <?php if (intval($cat['step']) === 4): ?>
-                                <option value="<?php echo htmlspecialchars($cat['code']); ?>"><?php echo htmlspecialchars($cat['title']); ?> (<?php echo htmlspecialchars($cat['code']); ?>)</option>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="button" class="btn btn-primary" onclick="triggerAddFieldStep4()"><i data-lucide="plus-circle"></i> เพิ่มเกณฑ์ควบคุม</button>
-                </div>
+                <button type="button" class="btn btn-primary" onclick="openFieldModal(4)"><i data-lucide="plus-circle"></i> เพิ่มเกณฑ์ควบคุม</button>
             </div>
             <?php renderFieldsTable($fields, 4); ?>
+            <?php renderStepMetadataForm($metadata, 4); ?>
         </section>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content confirm-modal-content" style="max-width: 540px;">
+            <div class="modal-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; display: flex; align-items: center; gap: 1rem;">
+                <div class="confirm-icon-container" id="confirm-modal-icon-bg">
+                    <i id="confirm-modal-icon" data-lucide="trash-2" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <h3 id="confirm-modal-title" style="margin: 0; font-size: 1.2rem; font-weight: 700; color: #0f172a;">ยืนยันการทำรายการ</h3>
+                    <p id="confirm-modal-subtitle" style="margin: 3px 0 0 0; font-size: 0.82rem; color: #64748b; font-weight: 400;">โปรดตรวจสอบความถูกต้องและอ่านหมายเหตุก่อนดำเนินการ</p>
+                </div>
+                <button type="button" class="modal-close" onclick="closeConfirmModal()" style="margin-left: auto; align-self: flex-start;"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 0.5rem 0;">
+                <p id="confirm-modal-message" style="font-weight: 600; font-size: 1.05rem; margin-top: 0.5rem; margin-bottom: 0.75rem; color: #1e293b;"></p>
+                
+                <div id="confirm-modal-details" class="confirm-details-box">
+                    <!-- Dynamically populated details -->
+                </div>
+                
+                <div id="confirm-modal-warning-wrapper" class="confirm-warning-box" style="display: none;">
+                    <i data-lucide="alert-circle" style="width: 16px; height: 16px; display: inline-block; vertical-align: text-bottom; margin-right: 4px;"></i>
+                    <span id="confirm-modal-warning"></span>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid #f1f5f9; padding-top: 1rem; margin-top: 0.5rem;">
+                <button type="button" class="btn btn-secondary" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;" onclick="closeConfirmModal()">ยกเลิก</button>
+                <button type="button" id="confirm-modal-submit-btn" class="btn btn-danger btn-confirm-danger" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">ยืนยันการลบ</button>
+            </div>
+        </div>
     </div>
 
     <!-- Agency Modal -->
@@ -935,7 +1040,9 @@ if ($fieldsRes) {
                 <div class="form-row-grid">
                     <div class="form-group">
                         <label for="field-category">หมวดหมู่ (Category) :</label>
-                        <input type="text" id="field-category" name="category" class="form-control" readonly style="width:100%; padding:0.6rem; background:#f1f5f9; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:bold;">
+                        <select id="field-category" name="category" class="form-control" style="width:100%; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:bold;">
+                            <!-- Populated dynamically based on current step -->
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="field-code-input">รหัสฟิลด์/คำถาม (Code) : <span style="color:#ef4444;">*</span></label>
@@ -1071,13 +1178,127 @@ if ($fieldsRes) {
             .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
         });
 
-        function deleteAgency(id) {
-            if (confirm("ยืนยันการลบหน่วยงานนี้?")) {
-                const data = new FormData();
-                data.append('sub_action', 'delete');
-                data.append('id', id);
+        // --- Custom Confirm Modal Logic ---
+        let confirmActionCallback = null;
+
+        function showConfirmModal(options) {
+            const isDanger = options.btnClass && options.btnClass.includes('btn-danger');
+            const iconBg = document.getElementById("confirm-modal-icon-bg");
+            
+            // Set styles dynamically
+            if (isDanger) {
+                iconBg.className = 'confirm-icon-container';
+                iconBg.style.backgroundColor = '#fee2e2';
+                iconBg.style.color = '#ef4444';
+                iconBg.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1)';
+                iconBg.style.animation = 'pulse-red 2s infinite';
+                iconBg.innerHTML = `<i id="confirm-modal-icon" data-lucide="${options.icon || 'trash-2'}" style="width: 22px; height: 22px;"></i>`;
+            } else {
+                iconBg.className = 'confirm-icon-container';
+                iconBg.style.backgroundColor = '#fef3c7';
+                iconBg.style.color = '#d97706';
+                iconBg.style.boxShadow = '0 0 0 4px rgba(217, 119, 6, 0.1)';
+                iconBg.style.animation = 'pulse-amber 2s infinite';
+                iconBg.innerHTML = `<i id="confirm-modal-icon" data-lucide="${options.icon || 'alert-triangle'}" style="width: 22px; height: 22px;"></i>`;
+            }
+            
+            document.getElementById("confirm-modal-title").innerText = options.title || 'ยืนยันการทำรายการ';
+            document.getElementById("confirm-modal-message").innerText = options.message || 'คุณแน่ใจหรือไม่ที่จะทำรายการนี้?';
+            
+            const detailsContainer = document.getElementById("confirm-modal-details");
+            detailsContainer.innerHTML = '';
+            if (options.details && options.details.length > 0) {
+                options.details.forEach(d => {
+                    const row = document.createElement('div');
+                    row.style.marginBottom = '0.4rem';
+                    row.innerHTML = `<span style="font-weight: 700; color: var(--moc-blue-deep);">${d.label}:</span> ${d.value}`;
+                    detailsContainer.appendChild(row);
+                });
+                detailsContainer.style.display = 'block';
+            } else {
+                detailsContainer.style.display = 'none';
+            }
+            
+            const warningWrapper = document.getElementById("confirm-modal-warning-wrapper");
+            const warningEl = document.getElementById("confirm-modal-warning");
+            if (options.warning) {
+                warningEl.innerText = options.warning;
+                warningWrapper.style.display = 'block';
+            } else {
+                warningWrapper.style.display = 'none';
+            }
+            
+            const submitBtn = document.getElementById("confirm-modal-submit-btn");
+            submitBtn.className = `btn ${options.btnClass || 'btn-danger'} ${isDanger ? 'btn-confirm-danger' : ''}`;
+            submitBtn.innerText = options.btnText || 'ยืนยัน';
+            
+            confirmActionCallback = options.onConfirm;
+            
+            document.getElementById("confirm-modal").classList.add("open");
+            document.getElementById("confirm-modal").classList.add("active");
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById("confirm-modal");
+            modal.classList.remove("open");
+            modal.classList.remove("active");
+            confirmActionCallback = null;
+        }
+
+        document.getElementById("confirm-modal-submit-btn").addEventListener("click", function() {
+            if (confirmActionCallback) {
+                confirmActionCallback();
+            }
+            closeConfirmModal();
+        });
+
+        function deleteAgency(btn, id) {
+            const row = document.getElementById(`agency-row-${id}`);
+            const name = btn.getAttribute('data-name');
+            
+            showConfirmModal({
+                title: 'ยืนยันการลบหน่วยงาน',
+                message: 'คุณต้องการลบหน่วยงานนี้ใช่หรือไม่?',
+                icon: 'building-2',
+                iconColor: '#ef4444',
+                btnClass: 'btn-danger',
+                btnText: 'ยืนยันการลบ',
+                details: [
+                    { label: 'ชื่อหน่วยงาน', value: name }
+                ],
+                warning: '* หมายเหตุ: รายชื่อหน่วยงานจะถูกนำออกจากการลงทะเบียน แต่ข้อมูล/สถิติประวัติการทำรายการเดิมจะถูกเก็บบันทึกไว้ในระบบเพื่อความปลอดภัย',
+                onConfirm: function() {
+                    const data = new FormData();
+                    data.append('sub_action', 'delete');
+                    data.append('id', id);
+                    
+                    fetch('admin_settings.php?action=manage_agencies', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            showToast(res.message, 'success');
+                            row.remove();
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
+                }
+            });
+        }
+
+        // --- Metadata Save Handler ---
+        document.querySelectorAll(".metadata-form").forEach(form => {
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const formEl = e.target;
+                const data = new FormData(formEl);
                 
-                fetch('admin_settings.php?action=manage_agencies', {
+                fetch(formEl.action, {
                     method: 'POST',
                     body: data
                 })
@@ -1085,52 +1306,59 @@ if ($fieldsRes) {
                 .then(res => {
                     if (res.status === 'success') {
                         showToast(res.message, 'success');
-                        document.getElementById(`agency-row-${id}`).remove();
                     } else {
                         showToast(res.message, 'error');
                     }
                 })
-                .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
-            }
-        }
-
-        // --- Metadata Save Handler ---
-        document.getElementById("metadata-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const form = e.target;
-            const data = new FormData(form);
-            
-            fetch(form.action, {
-                method: 'POST',
-                body: data
-            })
-            .then(res => res.json())
-            .then(res => {
-                if (res.status === 'success') {
-                    showToast(res.message, 'success');
-                } else {
-                    showToast(res.message, 'error');
-                }
-            })
-            .catch(err => showToast('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'error'));
+                .catch(err => showToast('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'error'));
+            });
         });
 
+        // --- Category options by step mapping ---
+        const stepCategories = {
+            1: [
+                { code: 'info_general', title: 'ข้อมูลทั่วไป (info_general)' }
+            ],
+            2: [
+                <?php foreach ($categories as $cat): ?>
+                    <?php if (intval($cat['step']) === 2): ?>
+                        { code: <?php echo json_encode($cat['code']); ?>, title: <?php echo json_encode($cat['title'] . ' (' . $cat['code'] . ')'); ?> },
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            ],
+            3: [
+                <?php foreach ($categories as $cat): ?>
+                    <?php if (intval($cat['step']) === 2): ?>
+                        { code: <?php echo json_encode($cat['code']); ?>, title: <?php echo json_encode($cat['title'] . ' (' . $cat['code'] . ')'); ?> },
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            ],
+            4: [
+                <?php foreach ($categories as $cat): ?>
+                    <?php if (intval($cat['step']) === 4): ?>
+                        { code: <?php echo json_encode($cat['code']); ?>, title: <?php echo json_encode($cat['title'] . ' (' . $cat['code'] . ')'); ?> },
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            ]
+        };
+
+        // --- Field Edit Helper ---
+        function editField(btn) {
+            const f = JSON.parse(btn.getAttribute('data-field'));
+            openFieldModal(
+                parseInt(f.step), 
+                f.category, 
+                parseInt(f.id), 
+                f.field_code, 
+                f.label, 
+                f.description, 
+                f.field_type, 
+                parseInt(f.is_required), 
+                parseInt(f.sort_order)
+            );
+        }
+
         // --- Field Form Handler ---
-        function triggerAddFieldStep2() {
-            const cat = document.getElementById("select-step2-cat").value;
-            openFieldModal(2, cat);
-        }
-
-        function triggerAddFieldStep3() {
-            const cat = document.getElementById("select-step3-cat").value;
-            openFieldModal(3, cat);
-        }
-
-        function triggerAddFieldStep4() {
-            const cat = document.getElementById("select-step4-cat").value;
-            openFieldModal(4, cat);
-        }
-
         function openFieldModal(step, category, id = 0, field_code = '', label = '', description = '', field_type = 'textarea', is_required = 0, sort_order = 10) {
             const modal = document.getElementById("field-modal");
             const title = document.getElementById("field-modal-title");
@@ -1146,7 +1374,23 @@ if ($fieldsRes) {
             
             idInput.value = id;
             stepInput.value = step;
-            catInput.value = category;
+
+            // Populate categories dynamically based on current step
+            catInput.innerHTML = '';
+            const cats = stepCategories[step] || [];
+            cats.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.code;
+                opt.textContent = c.title;
+                catInput.appendChild(opt);
+            });
+            
+            if (category) {
+                catInput.value = category;
+            } else if (cats.length > 0) {
+                catInput.value = cats[0].code;
+            }
+
             codeInput.value = field_code;
             labelInput.value = label;
             descInput.value = description;
@@ -1176,6 +1420,10 @@ if ($fieldsRes) {
                 title.innerText = "เพิ่มเกณฑ์ประเมินใหม่";
                 codeInput.readOnly = false;
                 codeInput.style.background = "#ffffff";
+                
+                if (step === 3) {
+                    descInput.value = "1 ต่ำ : \n2 ปานกลาง : \n3 ดี : \n4 ดีมาก : ";
+                }
             }
             modal.classList.add("open");
         }
@@ -1206,27 +1454,44 @@ if ($fieldsRes) {
             .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
         });
 
-        function deleteField(id, rowElementId) {
-            if (confirm("คุณแน่ใจว่าต้องการลบเกณฑ์ประเมินนี้? ฟิลด์นี้จะหยุดแสดงผลในฟอร์มประเมิน (ข้อมูลเดิมที่เก็บไว้ใน submissions จะไม่ถูกลบ)")) {
-                const data = new FormData();
-                data.append('sub_action', 'delete');
-                data.append('id', id);
-                
-                fetch('admin_settings.php?action=manage_fields', {
-                    method: 'POST',
-                    body: data
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status === 'success') {
-                        showToast(res.message, 'success');
-                        document.getElementById(rowElementId).remove();
-                    } else {
-                        showToast(res.message, 'error');
-                    }
-                })
-                .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
-            }
+        function deleteField(btn, id, rowElementId) {
+            const row = document.getElementById(rowElementId);
+            const code = btn.getAttribute('data-code');
+            const label = btn.getAttribute('data-label');
+            
+            showConfirmModal({
+                title: 'ยืนยันการลบเกณฑ์ประเมิน',
+                message: 'คุณต้องการลบเกณฑ์ประเมินนี้ใช่หรือไม่?',
+                icon: 'trash-2',
+                iconColor: '#ef4444',
+                btnClass: 'btn-danger',
+                btnText: 'ยืนยันการลบ',
+                details: [
+                    { label: 'รหัสเกณฑ์ (Code)', value: code },
+                    { label: 'หัวข้อเกณฑ์ประเมิน', value: label }
+                ],
+                warning: '* หมายเหตุ: ฟิลด์นี้จะหยุดแสดงผลในฟอร์มประเมิน (ข้อมูลเดิมที่เก็บไว้ในตาราง submissions จะไม่ถูกลบออก)',
+                onConfirm: function() {
+                    const data = new FormData();
+                    data.append('sub_action', 'delete');
+                    data.append('id', id);
+                    
+                    fetch('admin_settings.php?action=manage_fields', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            showToast(res.message, 'success');
+                            row.remove();
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
+                }
+            });
         }
 
         // --- Category Handler ---
@@ -1296,28 +1561,45 @@ if ($fieldsRes) {
             .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
         });
 
-        function deleteCategory(id) {
-            if (confirm("ยืนยันการลบกลุ่มหัวข้อประเมินนี้? (เกณฑ์ประเมินที่อยู่ในหัวข้อนี้จะยังคงอยู่ แต่อาจแสดงผลไม่ถูกต้องจนกว่าจะย้ายหัวข้อใหม่)")) {
-                const data = new FormData();
-                data.append('sub_action', 'delete');
-                data.append('id', id);
-                
-                fetch('admin_settings.php?action=manage_categories', {
-                    method: 'POST',
-                    body: data
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status === 'success') {
-                        showToast(res.message, 'success');
-                        document.getElementById(`cat-row-${id}`).remove();
-                        setTimeout(() => location.reload(), 800); // Reload to update selects
-                    } else {
-                        showToast(res.message, 'error');
-                    }
-                })
-                .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
-            }
+        function deleteCategory(btn, id) {
+            const row = document.getElementById(`cat-row-${id}`);
+            const code = btn.getAttribute('data-code');
+            const title = btn.getAttribute('data-title');
+            
+            showConfirmModal({
+                title: 'ยืนยันการลบกลุ่มหัวข้อประเมิน',
+                message: 'คุณต้องการลบกลุ่มหัวข้อประเมินนี้ใช่หรือไม่?',
+                icon: 'folder-x',
+                iconColor: '#ef4444',
+                btnClass: 'btn-danger',
+                btnText: 'ยืนยันการลบ',
+                details: [
+                    { label: 'รหัสกลุ่มหัวข้อ (Code)', value: code },
+                    { label: 'ชื่อกลุ่มหัวข้อประเมิน', value: title }
+                ],
+                warning: '* หมายเหตุ: เกณฑ์ประเมินที่อยู่ในหัวข้อนี้จะยังคงอยู่ แต่อาจแสดงผลไม่ถูกต้องจนกว่าจะแก้ไขย้ายเกณฑ์ไปอยู่กลุ่มหัวข้ออื่นแทน',
+                onConfirm: function() {
+                    const data = new FormData();
+                    data.append('sub_action', 'delete');
+                    data.append('id', id);
+                    
+                    fetch('admin_settings.php?action=manage_categories', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            showToast(res.message, 'success');
+                            row.remove();
+                            setTimeout(() => location.reload(), 800); // Reload to update selects
+                        } else {
+                            showToast(res.message, 'error');
+                        }
+                    })
+                    .catch(err => showToast('เชื่อมต่อฐานข้อมูลล้มเหลว', 'error'));
+                }
+            });
         }
     </script>
 </body>
@@ -1332,8 +1614,7 @@ function renderFieldsTable($fields, $step) {
                 <tr>
                     <th style="width: 100px;">รหัส</th>
                     <th style="width: 120px;">หมวดหมู่</th>
-                    <th>หัวข้อหลัก</th>
-                    <th>คำอธิบายเพิ่มเติม</th>
+                    <th>หัวข้อหลัก (คำถาม / เกณฑ์ประเมิน)</th>
                     <th style="width: 100px;">Required</th>
                     <th style="width: 70px;">ลำดับ</th>
                     <th style="width: 100px; text-align: center;">จัดการ</th>
@@ -1350,16 +1631,22 @@ function renderFieldsTable($fields, $step) {
                     <tr id="<?php echo $rowId; ?>">
                         <td class="font-bold text-uppercase"><?php echo htmlspecialchars($f['field_code']); ?></td>
                         <td><span class="badge-step badge-step-<?php echo $step; ?>"><?php echo htmlspecialchars($f['category']); ?></span></td>
-                        <td style="max-width: 250px; font-weight: 500;"><?php echo htmlspecialchars($f['label']); ?></td>
-                        <td style="max-width: 300px; color: var(--text-muted); font-size: 0.88rem;"><?php echo htmlspecialchars($f['description']); ?></td>
+                        <td style="max-width: 450px; font-weight: 500; line-height: 1.4;">
+                            <div style="font-weight: 600; color: var(--moc-blue-deep);"><?php echo htmlspecialchars($f['label']); ?></div>
+                            <?php if (!empty($f['description'])): ?>
+                                <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 400; margin-top: 4px; background: #f8fafc; padding: 6px 10px; border-left: 3px solid #cbd5e1; border-radius: 4px; white-space: pre-line; line-height: 1.45;">
+                                    <?php echo htmlspecialchars($f['description']); ?>
+                                </div>
+                            <?php endif; ?>
+                        </td>
                         <td class="text-center font-bold" style="color: <?php echo $f['is_required'] ? '#ef4444' : '#64748b'; ?>;">
                             <?php echo $f['is_required'] ? 'ใช่' : 'ไม่'; ?>
                         </td>
                         <td class="text-center"><?php echo $f['sort_order']; ?></td>
                         <td class="text-center">
                             <div class="btn-action-group" style="justify-content: center;">
-                                <button type="button" class="btn-mini btn-mini-edit" onclick="openFieldModal(<?php echo $step; ?>, '<?php echo htmlspecialchars($f['category'], ENT_QUOTES); ?>', <?php echo $f['id']; ?>, '<?php echo htmlspecialchars($f['field_code'], ENT_QUOTES); ?>', '<?php echo htmlspecialchars($f['label'], ENT_QUOTES); ?>', '<?php echo htmlspecialchars($f['description'], ENT_QUOTES); ?>', '<?php echo htmlspecialchars($f['field_type'], ENT_QUOTES); ?>', <?php echo $f['is_required']; ?>, <?php echo $f['sort_order']; ?>)" title="แก้ไข"><i data-lucide="pencil" style="width:14px; height:14px;"></i></button>
-                                <button type="button" class="btn-mini btn-mini-delete" onclick="deleteField(<?php echo $f['id']; ?>, '<?php echo $rowId; ?>')" title="ลบ"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+                                <button type="button" class="btn-mini btn-mini-edit" data-field="<?php echo htmlspecialchars(json_encode($f, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'); ?>" onclick="editField(this)" title="แก้ไข"><i data-lucide="pencil" style="width:14px; height:14px;"></i></button>
+                                <button type="button" class="btn-mini btn-mini-delete" data-code="<?php echo htmlspecialchars($f['field_code'], ENT_QUOTES); ?>" data-label="<?php echo htmlspecialchars($f['label'], ENT_QUOTES); ?>" onclick="deleteField(this, <?php echo $f['id']; ?>, '<?php echo $rowId; ?>')" title="ลบ"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -1371,6 +1658,58 @@ function renderFieldsTable($fields, $step) {
                 <?php endif; ?>
             </tbody>
         </table>
+    </div>
+    <?php
+}
+?>
+
+
+<?php
+// PHP helper to render metadata instruction/remark form in the admin panel
+function renderStepMetadataForm($metadata, $step) {
+    $inst_title_key = "step{$step}_instruction_title";
+    $inst_text_key = "step{$step}_instruction_text";
+    $remark_title_key = "step{$step}_remark_title";
+    $remark_text_key = "step{$step}_remark_text";
+
+    $inst_title = $metadata[$inst_title_key]['setting_value'] ?? '';
+    $inst_text = $metadata[$inst_text_key]['setting_value'] ?? '';
+    $remark_title = $metadata[$remark_title_key]['setting_value'] ?? '';
+    $remark_text = $metadata[$remark_text_key]['setting_value'] ?? '';
+    ?>
+    <div style="margin-top: 2.5rem; background: #f8fafc; border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-md); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <h4 style="color: var(--moc-blue-deep); margin-top: 0; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.05rem;">
+            <i data-lucide="file-text" style="width: 20px; height: 20px;"></i> แก้ไขคำชี้แจงและหมายเหตุประจำขั้นตอนที่ <?php echo $step; ?>
+        </h4>
+        <form class="metadata-form" method="POST" action="admin_settings.php?action=update_metadata">
+            <div class="form-row-grid">
+                <div class="meta-form-group">
+                    <label for="meta-<?php echo $inst_title_key; ?>" style="font-weight: 600; font-size: 0.88rem; margin-bottom: 0.4rem; display: block;">หัวข้อคำชี้แจง (Instruction Title)</label>
+                    <input type="text" id="meta-<?php echo $inst_title_key; ?>" name="settings[<?php echo $inst_title_key; ?>]" value="<?php echo htmlspecialchars($inst_title); ?>" style="width:100%; padding:0.6rem 0.8rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size: 0.9rem;">
+                </div>
+                <div class="meta-form-group">
+                    <label for="meta-<?php echo $remark_title_key; ?>" style="font-weight: 600; font-size: 0.88rem; margin-bottom: 0.4rem; display: block;">หัวข้อหมายเหตุ (Remark Title)</label>
+                    <input type="text" id="meta-<?php echo $remark_title_key; ?>" name="settings[<?php echo $remark_title_key; ?>]" value="<?php echo htmlspecialchars($remark_title); ?>" style="width:100%; padding:0.6rem 0.8rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size: 0.9rem;">
+                </div>
+            </div>
+            
+            <div class="form-row-grid" style="margin-top: 1rem;">
+                <div class="meta-form-group">
+                    <label for="meta-<?php echo $inst_text_key; ?>" style="font-weight: 600; font-size: 0.88rem; margin-bottom: 0.4rem; display: block;">เนื้อหาคำชี้แจง (Instruction Text - รองรับ HTML)</label>
+                    <textarea id="meta-<?php echo $inst_text_key; ?>" name="settings[<?php echo $inst_text_key; ?>]" rows="4" style="width:100%; padding:0.6rem 0.8rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-family: inherit; font-size: 0.9rem; resize: vertical;"><?php echo htmlspecialchars($inst_text); ?></textarea>
+                </div>
+                <div class="meta-form-group">
+                    <label for="meta-<?php echo $remark_text_key; ?>" style="font-weight: 600; font-size: 0.88rem; margin-bottom: 0.4rem; display: block;">เนื้อหาหมายเหตุ (Remark Text - รองรับ HTML)</label>
+                    <textarea id="meta-<?php echo $remark_text_key; ?>" name="settings[<?php echo $remark_text_key; ?>]" rows="4" style="width:100%; padding:0.6rem 0.8rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-family: inherit; font-size: 0.9rem; resize: vertical;"><?php echo htmlspecialchars($remark_text); ?></textarea>
+                </div>
+            </div>
+            
+            <div style="margin-top: 1.2rem; display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1.5rem; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.88rem;">
+                    <i data-lucide="save" style="width: 16px; height: 16px;"></i> บันทึกข้อมูลของหน้านี้
+                </button>
+            </div>
+        </form>
     </div>
     <?php
 }

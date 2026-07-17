@@ -638,6 +638,78 @@ $newMetadataKeys = [
         'setting_value' => 'ความพร้อมใช้ (Availability)',
         'category' => 'step2',
         'label' => 'หัวข้อด้านความพร้อมใช้ (AV)'
+    ],
+    [
+        'setting_key' => 'step2_instruction_title',
+        'setting_value' => 'คำชี้แจงขั้นตอนที่ 2: มิติคุณภาพข้อมูล',
+        'category' => 'step2',
+        'label' => 'หัวข้อคำชี้แจงขั้นตอนที่ 2'
+    ],
+    [
+        'setting_key' => 'step2_instruction_text',
+        'setting_value' => '',
+        'category' => 'step2',
+        'label' => 'เนื้อหาคำชี้แจงขั้นตอนที่ 2'
+    ],
+    [
+        'setting_key' => 'step2_remark_title',
+        'setting_value' => 'หมายเหตุขั้นตอนที่ 2',
+        'category' => 'step2',
+        'label' => 'หัวข้อหมายเหตุท้ายขั้นตอนที่ 2'
+    ],
+    [
+        'setting_key' => 'step2_remark_text',
+        'setting_value' => '',
+        'category' => 'step2',
+        'label' => 'เนื้อหาหมายเหตุท้ายขั้นตอนที่ 2'
+    ],
+    [
+        'setting_key' => 'step3_instruction_title',
+        'setting_value' => 'คำชี้แจงขั้นตอนที่ 3: แบบประเมินตนเอง',
+        'category' => 'step3',
+        'label' => 'หัวข้อคำชี้แจงขั้นตอนที่ 3'
+    ],
+    [
+        'setting_key' => 'step3_instruction_text',
+        'setting_value' => '',
+        'category' => 'step3',
+        'label' => 'เนื้อหาคำชี้แจงขั้นตอนที่ 3'
+    ],
+    [
+        'setting_key' => 'step3_remark_title',
+        'setting_value' => 'หมายเหตุขั้นตอนที่ 3',
+        'category' => 'step3',
+        'label' => 'หัวข้อหมายเหตุท้ายขั้นตอนที่ 3'
+    ],
+    [
+        'setting_key' => 'step3_remark_text',
+        'setting_value' => '',
+        'category' => 'step3',
+        'label' => 'เนื้อหาหมายเหตุท้ายขั้นตอนที่ 3'
+    ],
+    [
+        'setting_key' => 'step4_instruction_title',
+        'setting_value' => 'แบบตรวจประเมินการควบคุมและติดตามคุณภาพข้อมูล (Data Quality Monitoring and Control Checklist)',
+        'category' => 'step4',
+        'label' => 'หัวข้อคำชี้แจงขั้นตอนที่ 4'
+    ],
+    [
+        'setting_key' => 'step4_instruction_text',
+        'setting_value' => '<strong>คำชี้แจง :</strong> ให้ผู้ควบคุมคุณภาพข้อมูลประเมินผลการควบคุมคุณภาพข้อมูลตามหัวข้อด้านล่างนี้',
+        'category' => 'step4',
+        'label' => 'เนื้อหาคำชี้แจงขั้นตอนที่ 4'
+    ],
+    [
+        'setting_key' => 'step4_remark_title',
+        'setting_value' => 'หมายเหตุขั้นตอนที่ 4',
+        'category' => 'step4',
+        'label' => 'หัวข้อหมายเหตุท้ายขั้นตอนที่ 4'
+    ],
+    [
+        'setting_key' => 'step4_remark_text',
+        'setting_value' => '',
+        'category' => 'step4',
+        'label' => 'เนื้อหาหมายเหตุท้ายขั้นตอนที่ 4'
     ]
 ];
 
